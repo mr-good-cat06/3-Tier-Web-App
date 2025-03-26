@@ -1,4 +1,4 @@
-resource "aws_vpc" "main" {
+resource "aws_vpc" "vpc" {
     cidr_block = var.vpc_cidr
     enable_dns_support = true
     enable_dns_hostnames = true
@@ -27,8 +27,35 @@ resource "aws_subnet" "private" {
   cidr_block        = var.private_subnet_cidrs[count.index]
   availability_zone = var.availability_zones[count.index % length(var.availability_zones)]
   tags = {
-    Name = var.subnet_names[each.key]
+    Name = var.subnet_names[count.index]
   }
 }
 
 
+resource "aws_subnet" "public" {
+  count             = max(length(var.public_subnet_cidrs), length(var.availability_zones))
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = var.public_subnet_cidrs[count.index]
+  availability_zone = var.availability_zones[count.index % length(var.availability_zones)]
+  tags = {
+    Name = var.subnet_names[count.index]
+  }
+  
+}
+
+resource "aws_internet_gateway" "vpc_igw" {
+    vpc_id = aws_vpc.vpc.id
+
+}
+
+resource "aws_eip" "nat" {
+    count = length(var.public_subnet_cidrs)
+
+}
+
+resource "aws_nat_gateway" "nat-gw" {
+    count = length(var.public_subnet_cidrs)
+    allocation_id = aws_eip.nat[count.index].id
+    subnet_id = aws_subnet.public[count.index].id
+    depends_on = [ aws_internet_gateway.vpc_igw ]
+}

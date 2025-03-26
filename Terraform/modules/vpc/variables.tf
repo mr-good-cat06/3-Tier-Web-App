@@ -13,6 +13,11 @@ variable "private_subnet_cidrs" {
     default = [ "10.10.10.16/28", "10.10.10.32/28", "10.10.10.48/28", "10.10.10.64/28", "10.10.10.80/28", "10.10.10.96/28" ]
 }
 
+variable "public_subnet_cidrs" {
+    type = list(string)
+  
+}
+
 variable "subnet_names" {
     type = list(string)
     default = [ "web-1", "web-2", "app-1", "app-2", "db-1", "db-2" ]
