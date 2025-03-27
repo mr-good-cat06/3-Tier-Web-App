@@ -66,9 +66,38 @@ resource "aws_route_table" "public" {
 
   route = {
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.vpc_igw.id
-    
+    internet_gateway_id = aws_internet_gateway.vpc_igw.id
+
     
   }
   
+}
+
+resource "aws_route_table" "private" {
+  count = length(var.private_subnet_cidrs)
+  vpc_id = aws_vpc.vpc.id
+  route = {
+    cidr_block = "0.0.0.0/0"
+    nat_gateway_id = length(aws_nat_gateway.nat-gw) > 0 ? aws_nat_gateway.nat-gw[count.index % length(aws_nat_gateway.nat-gw)].id : null
+  }
+  
+  tags = {
+    Name = "${var.subnet_names[count.index]}-private-RT"
+  } 
+
+}
+
+resource "aws_route_table_association" "public" {
+  count = length(aws_subnet.public)
+  subnet_id = aws_subnet.public[count.index].id
+  route_table_id = aws_route_table.public.id
+
+}
+
+
+resource "aws_route_table_association" "private" {
+  count = length(aws_subnet.private)
+  subnet_id = aws_subnet.private[count.index].id
+  route_table_id = aws_route_table.private[count.index].id
+
 }
