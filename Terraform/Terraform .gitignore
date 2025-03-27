@@ -1,0 +1,6 @@
+# Terraform .gitignore
+.terraform/
+*.tfstate
+*.tfstate.*
+.terraform.lock.hcl
+*.exe
