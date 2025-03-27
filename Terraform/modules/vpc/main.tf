@@ -23,7 +23,7 @@ resource "aws_subnet" "private_subnet" {
 
 resource "aws_subnet" "private" {
   count             = max(length(var.private_subnet_cidrs), length(var.availability_zones))
-  vpc_id            = aws_vpc.main.id
+  vpc_id            = aws_vpc.vpc.id
   cidr_block        = var.private_subnet_cidrs[count.index]
   availability_zone = var.availability_zones[count.index % length(var.availability_zones)]
   tags = {
@@ -34,7 +34,7 @@ resource "aws_subnet" "private" {
 
 resource "aws_subnet" "public" {
   count             = max(length(var.public_subnet_cidrs), length(var.availability_zones))
-  vpc_id            = aws_vpc.main.id
+  vpc_id            = aws_vpc.vpc.id
   cidr_block        = var.public_subnet_cidrs[count.index]
   availability_zone = var.availability_zones[count.index % length(var.availability_zones)]
   tags = {
@@ -63,24 +63,21 @@ resource "aws_nat_gateway" "nat-gw" {
 
 resource "aws_route_table" "public" {
   vpc_id = aws_vpc.vpc.id
-
-  route = {
+  route  {
     cidr_block = "0.0.0.0/0"
-    internet_gateway_id = aws_internet_gateway.vpc_igw.id
-
-    
+    gateway_id = aws_internet_gateway.vpc_igw.id 
   }
-  
 }
 
 resource "aws_route_table" "private" {
   count = length(var.private_subnet_cidrs)
   vpc_id = aws_vpc.vpc.id
-  route = {
+  
+  route {
     cidr_block = "0.0.0.0/0"
     nat_gateway_id = length(aws_nat_gateway.nat-gw) > 0 ? aws_nat_gateway.nat-gw[count.index % length(aws_nat_gateway.nat-gw)].id : null
   }
-  
+
   tags = {
     Name = "${var.subnet_names[count.index]}-private-RT"
   } 
