@@ -6,12 +6,12 @@ variable "vpc_cidr" {
 
 variable "availability_zones" {
     type = list(string)
-    default = [ "ap-northeast-1", "ap-northeast-2"]
+    default = [ "ap-northeast-1a", "ap-northeast-1c"]
 }
 
 variable "public_subnet_cidrs" {
     type = list(string)
-    default = [ "20.20.20.16/28", "20.20.20.32/28" ]
+    default = [ "10.10.10.112/28", "10.10.10.128/28" ]
   
 }
 
