@@ -57,5 +57,18 @@ resource "aws_nat_gateway" "nat-gw" {
     count = length(var.public_subnet_cidrs)
     allocation_id = aws_eip.nat[count.index].id
     subnet_id = aws_subnet.public[count.index].id
+
     depends_on = [ aws_internet_gateway.vpc_igw ]
+}
+
+resource "aws_route_table" "public" {
+  vpc_id = aws_vpc.vpc.id
+
+  route = {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.vpc_igw.id
+    
+    
+  }
+  
 }
