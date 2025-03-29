@@ -38,7 +38,7 @@ resource "aws_subnet" "public" {
   cidr_block        = var.public_subnet_cidrs[count.index]
   availability_zone = var.availability_zones[count.index % length(var.availability_zones)]
   tags = {
-    Name = var.subnet_names[count.index]
+    Name = var.availability_zones[count.index]
   }
   
 }
@@ -59,6 +59,10 @@ resource "aws_nat_gateway" "nat-gw" {
     subnet_id = aws_subnet.public[count.index].id
 
     depends_on = [ aws_internet_gateway.vpc_igw ]
+
+    tags = {
+      Name = "${var.availability_zones[count.index]}-nat-gw"
+    }
 }
 
 resource "aws_route_table" "public" {
@@ -70,7 +74,7 @@ resource "aws_route_table" "public" {
 }
 
 resource "aws_route_table" "private" {
-  count = length(var.private_subnet_cidrs)
+  count = length(var.availability_zones)
   vpc_id = aws_vpc.vpc.id
   
   route {
@@ -79,7 +83,7 @@ resource "aws_route_table" "private" {
   }
 
   tags = {
-    Name = "${var.subnet_names[count.index]}-private-RT"
+    Name = "${var.availability_zones[count.index]}-private-RT"
   } 
 
 }
@@ -95,6 +99,6 @@ resource "aws_route_table_association" "public" {
 resource "aws_route_table_association" "private" {
   count = length(aws_subnet.private)
   subnet_id = aws_subnet.private[count.index].id
-  route_table_id = aws_route_table.private[count.index].id
+  route_table_id = aws_route_table.private[count.index % 2].id
 
 }
