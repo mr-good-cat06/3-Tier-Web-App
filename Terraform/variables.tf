@@ -24,3 +24,21 @@ variable "subnet_names" {
     type = list(string)
     default = [ "web-1", "web-2", "app-1", "app-2", "db-1", "db-2" ]
 }
+
+variable "project_name" {
+    type = string
+    default = "3tier-project"
+  
+}
+
+variable "ssh_allowed_ip" {
+    type = list(string)
+    default = [ "0.0.0.0/0" ]
+  
+}
+
+variable "app_port" {
+    type = number
+    default = 5000
+  
+}

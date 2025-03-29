@@ -31,135 +31,14 @@ module "ec2" {
  
 
 
-resource "aws_security_group" "database-sg" {
-    name = "database-sg"
-    vpc_id = module.vpc.id
+module "security-group" {
+    source = "./modules/security-groups"
+    project_name = var.project_name
+    Environment = var.Environment
+    ssh_allowed_cidrs = var.ssh_allowed_ip
+    app_port = var.app_port
 
-    tags = {
-      Name = "database-sg"
-    }
+
+
   
-}
-
-
-
-resource "aws_security_group" "app-12-sg" {
-    name = "app-12-sg"
-    vpc_id = module.vpc.id
-
-    tags = {
-      Name = "app-12-sg"
-    }
-  
-}
-
-resource "aws_vpc_security_group_ingress_rule" "allow_mysql" {
-    security_group_id = aws_security_group.app-12-sg.id
-    cidr_ipv4 = aws_security_group.web-1-sg.id && aws_security_group.web-2-sg.id
-    ip_protocol = "tcp"
-    from_port = 3306
-    to_port = 3306
-  
-}
-
-
-
-resource "aws_vpc_security_group_ingress_rule" "allow_ssh" {
-    security_group_id = aws_security_group.app-12-sg.id
-    cidr_ipv4 = "0.0.0.0/0"
-    ip_protocol = "ssh"
-    to_port = 22
-}
-
-resource "aws_vpc_security_group_egress_rule" "allow_db" {
-    security_group_id = aws_security_group.app-12-sg
-    cidr_ipv4 = aws_security_group.database-sg.id
-    ip_protocol = "-1"
-}
-
-resource "aws_vpc_security_group_egress_rule" "allow_all4" {
-    security_group_id = aws_security_group.app-12-sg.id
-    cidr_ipv4 = "0.0.0.0/0"
-    ip_protocol = "-1"
-}
-
-resource "aws_vpc_security_group_ingress_rule" "allow_backend" {
-    security_group_id = aws_security_group.database-sg.id
-    cidr_ipv4 = aws_security_group.app-12-sg.id
-    ip_protocol = "tcp"
-    from_port = 3306
-    to_port = 5000
-  
-}
-
-resource "aws_vpc_security_group_egress_rule" "allow_all-1" {
-    security_group_id = aws_security_group.database-sg.id
-    cidr_ipv4 = "0.0.0.0/0"
-    ip_protocol = "-1"
-}
-
- resource "aws_security_group" "web-1-sg" {
-     name = "web-1-sg"
-     vpc_id = module.vpc.id
-
-     tags = {
-       Name = "web-1-sg"
-     }
-   
- }
-
- resource "aws_vpc_security_group_ingress_rule" "allow_ssh" {
-     security_group_id = aws_security_group.web-1-sg.id
-     cidr_ipv4 = "0.0.0.0/0"
-     ip_protocol = "ssh"
-     to_port = 22
-   
- }
-
-resource "aws_vpc_security_group_ingress_rule" "allow_http" {
-    security_group_id = aws_security_group.web-1-sg.id
-    cidr_ipv4 = "0.0.0.0/0"
-    ip_protocol = "tcp"
-    from_port = 80
-    to_port = 80
-  
-}
-
-resource "aws_vpc_security_group_egress_rule" "allow_all2" {
-    security_group_id = aws_security_group.web-1-sg.id
-    cidr_ipv4 = "0.0.0.0/0"
-    ip_protocol = "-1"
-}
-
-resource "aws_security_group" "web-2-sg" {
-    name = "web-2-sg"
-    vpc_id = module.vpc.id
-
-    tags = {
-      Name = "web-2-sg"
-    }
-  
-}
-
-resource "aws_vpc_security_group_ingress_rule" "allow_ssh" {
-    security_group_id = aws_security_group.web-2-sg.id
-    cidr_ipv4 = "0.0.0.0/0"
-    ip_protocol = "ssh"
-    to_port = 22
-  
-}
-
-resource "aws_vpc_security_group_ingress_rule" "allow_http" {
-    security_group_id = aws_security_group.web-2-sg.id
-    cidr_ipv4 = "0.0.0.0/0"
-    ip_protocol = "tcp"
-    from_port = 80
-    to_port = 80
-  
-}
-
-resource "aws_vpc_security_group_egress_rule" "allow_all3" {
-    security_group_id = aws_security_group.web-2-sg.id
-    cidr_ipv4 = "0.0.0.0/0"
-    ip_protocol = "-1"
 }
