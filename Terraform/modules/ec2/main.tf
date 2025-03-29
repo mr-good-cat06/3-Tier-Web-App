@@ -30,8 +30,9 @@ resource "aws_instance" "ec2-11" {
     instance_type = "t2.micro"
     subnet_id = element(var.private_subnet_ids, count.index)
     
+    
     tags = {
-      Name = element(var.subnet_names, count.index)
+      Name = ("ec2-${element(var.subnet_names, count.index)}")
 
     }
     
