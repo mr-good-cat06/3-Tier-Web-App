@@ -21,3 +21,9 @@ module "vpc" {
     
 
 }
+
+module "ec2" {
+    source = "./modules/ec2"
+    private_subnet_ids = module.vpc.private_subnet_ids
+    subnet_names = module.vpc.subnet_names
+}

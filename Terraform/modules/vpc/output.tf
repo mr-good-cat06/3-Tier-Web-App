@@ -7,3 +7,9 @@ output "private_subnet_ids" {
   description = "The IDs of the private subnets"
   value       = aws_subnet.private.*.id
 }
+
+output "subnet_names" {
+  description = "The names of the subnets"
+  value       = aws_subnet.private.*.id
+  
+}
