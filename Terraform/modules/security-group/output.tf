@@ -10,3 +10,7 @@ output "app_sg_id" {
 output "db_sg_id" {
     value = aws_security_group.database.id
 }
+
+output "endpoint_sg_id"{
+    value = aws_security_group.endpoint-sg.id
+}

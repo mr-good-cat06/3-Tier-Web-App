@@ -18,6 +18,10 @@ module "vpc" {
     private_subnet_cidrs = var.private_subnet_cidrs
     public_subnet_cidrs = var.public_subnet_cidrs
     subnet_names = var.subnet_names
+    endpoint_sg_id = module.security-group.endpoint_sg_id
+    private_subnet_ids = module.vpc.private_subnet_ids
+
+
     
 
 }
@@ -28,6 +32,9 @@ module "ec2" {
     subnet_names = var.subnet_names
     web_sg_id = module.security-group.web_sg_id
     app_sg_id = module.security-group.app_sg_id
+    interface-profile = module.iam-role.ssm-profile
+
+
 
 }
 
@@ -42,4 +49,9 @@ module "security-group" {
     app_port = var.app_port
     vpc_id = module.vpc.vpc_id
 
+}
+
+module "iam-role" {
+    source = "./modules/iam-role"
+  
 }

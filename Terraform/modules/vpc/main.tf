@@ -4,6 +4,44 @@ resource "aws_vpc" "vpc" {
     enable_dns_hostnames = true
 }
 
+resource "aws_vpc_endpoint" "ssm" {
+    vpc_id = aws_vpc.vpc.id
+    service_name = "com.amazonaws.ap-northeast-1.ssm"
+    vpc_endpoint_type = "Interface"
+    subnet_ids         = [var.private_subnet_ids[0], var.private_subnet_ids[1]]
+    security_group_ids = [var.endpoint_sg_id]
+
+    tags = {
+        Name = "ssm-vpc-endpoint"
+    }
+  
+}
+
+resource "aws_vpc_endpoint" "ssmmesages" {
+    vpc_id = aws_vpc.vpc.id
+    service_name = "com.amazonaws.ap-northeast-1.ssmmessages"
+    vpc_endpoint_type = "Interface"
+    subnet_ids         = [var.private_subnet_ids[0], var.private_subnet_ids[1]]
+    security_group_ids = [var.endpoint_sg_id]
+
+    tags = {
+        Name = "ssmmessages-vpc-endpoint"
+    }
+  
+}
+
+resource "aws_vpc_endpoint" "ec2messages"{
+    vpc_id = aws_vpc.vpc.id
+    service_name = "com.amazonaws.ap-northeast-1.ec2messages"
+    vpc_endpoint_type = "Interface"
+    subnet_ids         = [var.private_subnet_ids[0], var.private_subnet_ids[1]]
+    security_group_ids = [var.endpoint_sg_id]
+
+    tags = {
+        Name = "ec2messages-vpc-endpoint"
+    }
+}
+
 
 /*
 resource "aws_subnet" "private_subnet" {

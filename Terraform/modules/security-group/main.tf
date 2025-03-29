@@ -134,3 +134,28 @@ resource "aws_vpc_security_group_egress_rule" "db_all_out" {
   ip_protocol       = "-1" # All protocols
   description       = "Allow all outbound traffic"
 }
+
+resource "aws_security_group" "endpoint-sg" {
+  name        = "${var.project_name}-endpoint-sg"
+  description = "Security group for endpoint instances"
+  vpc_id      = var.vpc_id
+  
+}
+
+
+resource "aws_vpc_security_group_ingress_rule" "endponit-ssh" {
+  security_group_id = aws_security_group.endpoint-sg.id
+  cidr_ipv4         = "0.0.0.0/0"
+  from_port         = 22
+  to_port           = 22
+  ip_protocol       = "tcp"
+  description       = "Allow SSH from anywhere"
+  
+}
+
+resource "aws_vpc_security_group_egress_rule" "endpoint_all_out" {
+  security_group_id = aws_security_group.endpoint-sg.id
+  cidr_ipv4         = "0.0.0.0/0"
+  ip_protocol       = "-1" # All protocols
+  description       = "Allow all outbound traffic"
+}
