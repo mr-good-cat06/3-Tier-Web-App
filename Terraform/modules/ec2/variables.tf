@@ -4,5 +4,12 @@ variable "private_subnet_ids" {
 
 variable "subnet_names" {
     type = list(string)
+}
 
+variable "web_sg_id" {
+    type = string 
+}
+
+variable "app_sg_id" {
+    type = string
 }

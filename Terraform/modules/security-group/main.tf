@@ -14,7 +14,7 @@ locals {
 resource "aws_security_group" "web" {
   name        = "${var.project_name}-web-sg"
   description = "Security group for web servers"
-  vpc_id      = module.vpc.vpc_id
+  vpc_id      = var.vpc_id
 
   tags = merge(
     local.common_tags,
@@ -65,7 +65,7 @@ resource "aws_vpc_security_group_egress_rule" "web_all_out" {
 resource "aws_security_group" "app" {
   name        = "${var.project_name}-app-sg"
   description = "Security group for application servers"
-  vpc_id      = module.vpc.vpc_id
+  vpc_id      = var.vpc_id
 
   tags = merge(
     local.common_tags,
@@ -107,7 +107,7 @@ resource "aws_vpc_security_group_egress_rule" "app_all_out" {
 resource "aws_security_group" "database" {
   name        = "${var.project_name}-db-sg"
   description = "Security group for database instances"
-  vpc_id      = module.vpc.vpc_id
+  vpc_id      = var.vpc_id
 
 
   tags = merge(

@@ -30,13 +30,13 @@ resource "aws_instance" "ec2-11" {
     instance_type = "t2.micro"
     subnet_id = element(var.private_subnet_ids, count.index)
     
-    
-    tags = {
-      Name = ("ec2-${element(var.subnet_names, count.index)}")
-
-    }
-    
-
-
+      # Determine security group based on subnet type/name
+  vpc_security_group_ids = [
+    contains(["web", "web-1", "web-2"], element(var.subnet_names, count.index)) ? var.web_sg_id : var.app_sg_id
+  ]
+  
+  tags = {
+    Name = ("ec2-${element(var.subnet_names, count.index)}")
+  }
   
 }

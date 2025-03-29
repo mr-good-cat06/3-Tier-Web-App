@@ -17,3 +17,9 @@ variable "app_port" {
   description = "Port that the application listens on"
   type        = number
 }
+
+variable "vpc_id" {
+  description = "ID of the VPC"
+  type        = string
+  
+}

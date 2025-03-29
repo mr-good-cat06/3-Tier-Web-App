@@ -1,5 +1,5 @@
 output "id" {
-    value = module.vpc.id
+    value = module.vpc.vpc_id
   
 }
 
