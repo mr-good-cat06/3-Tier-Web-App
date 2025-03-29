@@ -32,13 +32,9 @@ module "ec2" {
 
 
 module "security-group" {
-    source = "./modules/security-groups"
+    source = "./modules/security-group"
     project_name = var.project_name
-    Environment = var.Environment
+    environment = var.Environment
     ssh_allowed_cidrs = var.ssh_allowed_ip
     app_port = var.app_port
-
-
-
-  
 }

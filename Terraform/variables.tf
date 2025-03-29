@@ -42,3 +42,9 @@ variable "app_port" {
     default = 5000
   
 }
+
+variable "Environment" {
+    type = string
+    default = "dev"
+  
+}
