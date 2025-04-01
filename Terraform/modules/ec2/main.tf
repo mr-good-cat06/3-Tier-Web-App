@@ -28,7 +28,6 @@ resource "aws_instance" "ec2-instance" {
     count = (length(var.private_subnet_ids)-2)
     ami = data.aws_ami.linux_ami.id
     instance_type = "t2.micro"
-    iam_instance_profile = var.interface-profile
     subnet_id = element(var.private_subnet_ids, count.index)
     
       # Determine security group based on subnet type/name
