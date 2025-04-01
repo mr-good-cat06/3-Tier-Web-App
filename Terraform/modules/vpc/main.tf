@@ -4,7 +4,29 @@ resource "aws_vpc" "vpc" {
     enable_dns_hostnames = true
 }
 
+resource "aws_vpc_endpoint" "ssm" {
+  vpc_id            = aws_vpc.vpc.id
+  service_name      = "com.amazonaws.${var.region}.ssm"
+  vpc_endpoint_type = "Interface"
+  subnet_ids         = slice(var.private_subnet_ids, 0, 2)  # First subnet from each AZ
+  security_group_ids = [var.endpoint_sg_id]
+}
 
+resource "aws_vpc_endpoint" "ssmmessages" {
+  vpc_id            = aws_vpc.vpc.id
+  service_name      = "com.amazonaws.${var.region}.ssmmessages"
+  vpc_endpoint_type = "Interface"
+  subnet_ids         = slice(var.private_subnet_ids, 0, 2) # First subnet from each AZ
+  security_group_ids = [var.endpoint_sg_id]
+}
+
+resource "aws_vpc_endpoint" "ec2messages" {
+  vpc_id            = aws_vpc.vpc.id
+  service_name      = "com.amazonaws.${var.region}.ec2messages"
+  vpc_endpoint_type = "Interface"
+  subnet_ids         = slice(var.private_subnet_ids, 0, 2) # First subnet from each AZ
+  security_group_ids = [var.endpoint_sg_id]
+}
 /*
 resource "aws_subnet" "private_subnet" {
     for_each = {for idx, cidr in var.private_subnet_cidr : idx => cidr}

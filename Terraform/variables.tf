@@ -48,3 +48,9 @@ variable "Environment" {
     default = "dev"
   
 }
+
+variable "region" {
+    type = string
+    default = "ap-northeast-1"
+  
+}

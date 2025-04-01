@@ -29,4 +29,9 @@ variable "endpoint_sg_id" {
   
 }
 
+variable "region" {
+    type = string
+  
+}
+
 
