@@ -184,7 +184,7 @@ resource "aws_security_group" "frontend-LB" {
   )
 }
 
-resource "aws_vpc_security_group_ingree_rule" "frontend-LB_http" {
+resource "aws_vpc_security_group_ingress_rule" "frontend-LB_http" {
   security_group_id = aws_security_group.frontend-LB.id
   cidr_ipv4         = "0.0.0.0/0"
   from_port         = 80
@@ -217,7 +217,7 @@ resource "aws_security_group" "backend-LB" {
   )
 }
 
-resource "aws_vpc_security_group_ingree_rule" "backend-LB_all_in" {
+resource "aws_vpc_security_group_ingress_rule" "backend-LB_all_in" {
   security_group_id = aws_security_group.backend-LB.id
   cidr_ipv4         = "0.0.0.0/0"
   ip_protocol       = "-1"

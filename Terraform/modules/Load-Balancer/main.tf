@@ -9,11 +9,11 @@ resource "aws_lb_target_group" "web-tg" {
 resource "aws_lb_target_group_attachment" "web-tg-attach" {
 
     for_each = {
-        for k, v in var.var.web-instance-id
+        for k, v in var.web-instance-id
         :k=>v
     }
 
-    target_group_arn = aws_lb_target_group.web-tg
+    target_group_arn = aws_lb_target_group.web-tg.arn
     target_id = each.value
 
 }

@@ -67,6 +67,6 @@ module "load-balancing" {
     app-instance-id = module.ec2.app-instance-id
     frontend-sg-id = module.security-group.frontend-sg-id
     backend-sg-id = module.security-group.backend-sg-id
-    public_subnet_ids = module.vpc.public_subnet_ids
+    public_subnet_ids = module.vpc.o_public_subnet_ids
   
 }

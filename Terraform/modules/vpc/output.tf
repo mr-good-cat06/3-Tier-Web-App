@@ -8,6 +8,11 @@ output "private_subnet_ids" {
   value       = aws_subnet.private.*.id
 }
 
+output "o_public_subnet_ids" {
+  description = "The IDs of the public subnets"
+  value       = aws_subnet.public.*.id
+  
+}
 
 output "db_sunbnet_id-list" {
   description = "The IDs of the database subnets"
