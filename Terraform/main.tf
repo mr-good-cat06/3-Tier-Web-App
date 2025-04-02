@@ -23,9 +23,6 @@ module "vpc" {
     region = var.region
     vpc_name = var.project_name
 
-
-    
-
 }
 
 module "ec2" {
@@ -36,11 +33,7 @@ module "ec2" {
     app_sg_id = module.security-group.app_sg_id
     iam_instance_profile_name = module.iam.name
     
-
 }
-
-
- 
 
 
 module "security-group" {
@@ -53,10 +46,10 @@ module "security-group" {
 
 }
 
+
 module "iam" {
     source = "./modules/iam-role"
 
-  
 }
 
 module "databse" {
@@ -64,6 +57,16 @@ module "databse" {
     db_subnet_ids = module.vpc.db_sunbnet_id-list
     db_sg = [module.security-group.db_sg_id]
 
+}
 
 
+module "load-balancing" {
+    source = "./modules/Load-Balancer"
+    vpc_id = module.vpc.vpc_id
+    web-instance-id = module.ec2.web-instance-id
+    app-instance-id = module.ec2.app-instance-id
+    frontend-sg-id = module.security-group.frontend-sg-id
+    backend-sg-id = module.security-group.backend-sg-id
+    public_subnet_ids = module.vpc.public_subnet_ids
+  
 }

@@ -1,6 +1,6 @@
-## Target Group
+## Target Group ***
     
-     ___  Target type
+     ___  Target type (no need to specify because code for each type is different)
     |
     |___ Target Group name
     |
@@ -13,11 +13,11 @@
     |___ Register Targets
 
 
-## Load balancers
+## Load balancers || Depends on Target Group
 
-         ___ LB type
+         ___ LB name
         |
-        |___ LB name
+        |___ LB type
         |
         |___ Scheme (Internal/External)
         |
@@ -30,7 +30,7 @@
         |___ Target group selection
 
 
-## Launch Tamplete
+## Launch Tamplete ***
 
              ___ Name
             |
@@ -49,33 +49,34 @@
             |___ Volume
 
 
-## Auto Scaling Group            |
+## Auto Scaling Group || Depends on Launch Tamplete
            
-             ___ Name
-            |
-            |___ LT Information
-            |           
-            |___ Version
-            |
-            |___ VPC selection
-            |           
-            |___ AZ and Subnet
-            |
-            |___ Distribution type : Balanced Best Effort will be good. 
-            |           
-            |___ Attach Load Balancer
-            |
-            |___ No VPC lattice
-            |
-            |___ ELB Health Check
-            |
-            |___ Define Group Size
-            |
-            |___ Define Min/max number of Scaling
-            |
-            |___ Choose Replacement Behavior
-            |
-            |___ Can Add Notification via SNS
+                 ___ Name
+                |
+                |___ LT Information
+                |           
+                |___ Version
+                |
+                |___ VPC selection
+                |           
+                |___ AZ and Subnet
+                |
+                |___ Distribution type : Balanced Best Effort will be good. 
+                |           
+                |___ Attach Load Balancer
+                |
+                |___ No VPC lattice
+                |
+                |___ ELB Health Check
+                |
+                |___ Define Group Size
+                |
+                |___ Define Min/max number of Scaling
+                |
+                |___ Choose Replacement Behavior
+                |
+                |___ Can Add Notification via SNS
+
 
            
 

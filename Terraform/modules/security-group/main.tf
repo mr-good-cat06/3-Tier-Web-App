@@ -167,3 +167,68 @@ resource "aws_vpc_security_group_egress_rule" "endpoint_all_out" {
   ip_protocol       = "-1" # All protocols
   description       = "Allow all outbound traffic"
 }
+
+
+
+resource "aws_security_group" "frontend-LB" {
+  name        = "${var.project_name}-frontend-sg"
+  description = "Security group for frontend LB"
+  vpc_id      = var.vpc_id
+
+
+  tags = merge(
+    local.common_tags,
+    {
+      Name = "${var.project_name}-frontend-LB-sg"
+    }
+  )
+}
+
+resource "aws_vpc_security_group_ingree_rule" "frontend-LB_http" {
+  security_group_id = aws_security_group.frontend-LB.id
+  cidr_ipv4         = "0.0.0.0/0"
+  from_port         = 80
+  to_port           = 80
+  ip_protocol       = "tcp"
+  description       = "Allow HTTP from anywhere"
+  
+}
+
+resource "aws_vpc_security_group_egress_rule" "frontend-LB_all_out" {
+  security_group_id = aws_security_group.frontend-LB.id
+  cidr_ipv4         = "0.0.0.0/0"
+  ip_protocol       = "-1" # All protocols
+  description       = "Allow all outbound traffic"
+  
+}
+
+
+resource "aws_security_group" "backend-LB" {
+  name        = "${var.project_name}-backend-sg"
+  description = "Security group for backend LB"
+  vpc_id      = var.vpc_id
+
+
+  tags = merge(
+    local.common_tags,
+    {
+      Name = "${var.project_name}-backend-LB-sg"
+    }
+  )
+}
+
+resource "aws_vpc_security_group_ingree_rule" "backend-LB_all_in" {
+  security_group_id = aws_security_group.backend-LB.id
+  cidr_ipv4         = "0.0.0.0/0"
+  ip_protocol       = "-1"
+  description       = "Allow anywhere"
+  
+}
+
+resource "aws_vpc_security_group_egress_rule" "backend-LB_all_out" {
+  security_group_id = aws_security_group.backend-LB.id
+  cidr_ipv4         = "0.0.0.0/0"
+  ip_protocol       = "-1" # All protocols
+  description       = "Allow all outbound traffic"
+  
+}
