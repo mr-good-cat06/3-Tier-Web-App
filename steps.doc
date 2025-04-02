@@ -47,10 +47,37 @@
             |___ Security group
             |
             |___ Volume
+
+
+## Auto Scaling Group            |
+           
+             ___ Name
             |
-            |___ 
+            |___ LT Information
+            |           
+            |___ Version
             |
-            |___           
+            |___ VPC selection
+            |           
+            |___ AZ and Subnet
+            |
+            |___ Distribution type : Balanced Best Effort will be good. 
+            |           
+            |___ Attach Load Balancer
+            |
+            |___ No VPC lattice
+            |
+            |___ ELB Health Check
+            |
+            |___ Define Group Size
+            |
+            |___ Define Min/max number of Scaling
+            |
+            |___ Choose Replacement Behavior
+            |
+            |___ Can Add Notification via SNS
+
+           
 
 
 
