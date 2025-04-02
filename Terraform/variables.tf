@@ -27,7 +27,7 @@ variable "subnet_names" {
 
 variable "project_name" {
     type = string
-    default = "3tier-project"
+    default = "3Tier-project"
   
 }
 
