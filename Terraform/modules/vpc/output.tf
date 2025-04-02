@@ -8,3 +8,8 @@ output "private_subnet_ids" {
   value       = aws_subnet.private.*.id
 }
 
+
+output "db_sunbnet_ids" {
+  description = "The IDs of the database subnets"
+  value = [for sb in aws_aws_subnet.private : sb.id if contains(sb.tags.Name, "db")]
+}
