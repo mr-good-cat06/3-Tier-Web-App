@@ -21,6 +21,7 @@ module "vpc" {
     endpoint_sg_id = module.security-group.endpoint_sg_id
     private_subnet_ids = module.vpc.private_subnet_ids
     region = var.region
+    vpc_name = var.project_name
 
 
     

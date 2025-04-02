@@ -1,0 +1,57 @@
+## Target Group
+    
+     ___  Target type
+    |
+    |___ Target Group name
+    |
+    |___ Protocol : Port
+    |
+    |___ VPC selection
+    |
+    |___ Health Check Information
+    |
+    |___ Register Targets
+
+
+## Load balancers
+
+         ___ LB type
+        |
+        |___ LB name
+        |
+        |___ Scheme (Internal/External)
+        |
+        |___ VPC selection
+        |
+        |___ AZ and Subnet selection
+        |
+        |___ Security Group
+        |
+        |___ Target group selection
+
+
+## Launch Tamplete
+
+             ___ Name
+            |
+            |___ Version
+            |
+            |___ AMI selection
+            |
+            |___ Instance type
+            |
+            |___ Key pair
+            |
+            |___ Subnet (Should't be included)
+            |
+            |___ Security group
+            |
+            |___ Volume
+            |
+            |___ 
+            |
+            |___           
+
+
+
+
