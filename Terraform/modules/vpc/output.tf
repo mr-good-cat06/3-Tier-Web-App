@@ -9,7 +9,8 @@ output "private_subnet_ids" {
 }
 
 
-output "db_sunbnet_ids" {
+output "db_sunbnet_id-list" {
   description = "The IDs of the database subnets"
-  value = [for sb in aws_aws_subnet.private : sb.id if contains(sb.tags.Name, "db")]
+  value = [for sb in aws_subnet.private : sb.id if can(sb.tags.Name) && startswith(sb.tags.Name, "db")]
+
 }

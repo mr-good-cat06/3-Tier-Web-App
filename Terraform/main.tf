@@ -60,8 +60,8 @@ module "iam" {
 
 module "databse" {
     source = "./modules/database"
-    db_subnet_ids = module.vpc.db_subnet_ids
-    db_sg = module.security-group.db_sg_id
+    db_subnet_ids = module.vpc.db_sunbnet_id-list
+    db_sg = [module.security-group.db_sg_id]
 
 
 
