@@ -1,3 +1,3 @@
-output "aws_lt_name" {
-    value = aws_launch_tamplete.frontend-LT.id
+output "frontend-launch-template-id" {
+    value = aws_launch_template.frontend-LT.id
 }

@@ -19,16 +19,10 @@ resource "aws_autoscaling_group" "web-asg" {
 
     }
 
-    vpc_zone_identifier = var.web_subnet_ids
+    vpc_zone_identifier = var.web_subnet_ids_list
 }
 
 resource "aws_autoscaling_attachment" "frontend-asg-attach" {
     autoscaling_group_name = aws_autoscaling_group.web-asg.id
     elb = var.frontend-LB-id  
-}
-
-resource "aws_autoscaling_attachment" "frontend-asg-attach" {
-    autoscaling_group_name = aws_autoscaling_group.web-asg.id
-    lb_target_group_arn = var.web-tg-arn
-  
 }

@@ -26,7 +26,7 @@ output "app_sunbnet_id-list" {
 
 }
 
-output "web_sunbnet_id-list" {
+output "web_subnet_id-list" {
   description = "The IDs of the database subnets"
   value = [for sb in aws_subnet.private : sb.id if can(sb.tags.Name) && startswith(sb.tags.Name, "web")]
 

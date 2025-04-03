@@ -2,11 +2,7 @@ variable "frontend-launch-template-id" {
     type = string
 }
 
-variable "backend-launch-template-id" {
-    type = string
-  
-}
-variable "web_subnet_ids" {
+variable "web_subnet_ids_list" {
     type = list(string)
   
 }
