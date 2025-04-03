@@ -25,3 +25,7 @@ variable "public_subnet_ids" {
   
 }
 
+variable "app_subnet_ids" {
+    type = list(string)
+  
+}

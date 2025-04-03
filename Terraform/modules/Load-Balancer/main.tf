@@ -6,6 +6,11 @@ resource "aws_lb_target_group" "web-tg" {
   
 }
 
+resource "aws_lb_target_group" "app-tg" {
+    name = "app-tg"
+    vpc_id = var.vpc_id
+  
+}
 resource "aws_lb_target_group_attachment" "web-tg-attach" {
 
     for_each = {
@@ -16,6 +21,14 @@ resource "aws_lb_target_group_attachment" "web-tg-attach" {
     target_group_arn = aws_lb_target_group.web-tg.arn
     target_id = each.value
 
+}
+
+resource "aws_lb_target_group_attachment" "app-tg-attach" {
+    for_each = {
+        for k, v in var.var.app-instance-id
+        :k 
+    }
+  
 }
 
 resource "aws_lb" "frontend" {
