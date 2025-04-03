@@ -26,8 +26,10 @@ resource "aws_lb_target_group_attachment" "web-tg-attach" {
 resource "aws_lb_target_group_attachment" "app-tg-attach" {
     for_each = {
         for k, v in var.var.app-instance-id
-        :k 
+        :k=>v
     }
+    target_group_arn = aws_lb_target_group.app-tg.arn
+    target_id = each.value
   
 }
 
@@ -38,6 +40,15 @@ resource "aws_lb" "frontend" {
     security_groups = [var.frontend-sg-id]
     subnets = var.public_subnet_ids
 
+}
+
+resource "aws_lb" "backend" {
+    name = "Backend-lb"
+    load_balancer_type = "network"
+    internal = true
+    subnets = var.app_subnet_ids
+
+  
 }
 
 resource "aws_lb_listener" "frontend-listener" {
