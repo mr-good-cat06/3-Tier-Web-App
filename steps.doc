@@ -51,15 +51,13 @@
 
 ## Auto Scaling Group || Depends on Launch Tamplete
            
-                 ___ Name
+                 ___ Name                               --- name
                 |
-                |___ LT Information
+                |___ LT Information (name)              --- 
                 |           
-                |___ Version
-                |
-                |___ VPC selection
+                |___ Version                            ---                      ---
                 |           
-                |___ AZ and Subnet
+                |___ AZ and Subnet                      ---
                 |
                 |___ Distribution type : Balanced Best Effort will be good. 
                 |           

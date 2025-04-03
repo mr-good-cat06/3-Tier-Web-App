@@ -68,5 +68,18 @@ module "load-balancing" {
     frontend-sg-id = module.security-group.frontend-sg-id
     backend-sg-id = module.security-group.backend-sg-id
     public_subnet_ids = module.vpc.o_public_subnet_ids
+    app_subnet_ids = module.vpc.app_sunbnet_id-list
+    
+  
+}
+
+module "asg" {
+    source = "./modules/auto-scaling-group"
+    frontend-launch-template-id = module.ec2.frontend-launch-template-id
+    backend-launch-template-id = module.ec2.backend-launch-template-id
+    web_subnet_ids = module.vpc.web_subnet_ids
+    web-tg-arn = module.load-balancing.web-tg-arn
+    frontend-LB-id = module.load-balancing.frontend-LB-id
+
   
 }

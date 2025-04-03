@@ -25,7 +25,7 @@ resource "aws_lb_target_group_attachment" "web-tg-attach" {
 
 resource "aws_lb_target_group_attachment" "app-tg-attach" {
     for_each = {
-        for k, v in var.var.app-instance-id
+        for k, v in var.app-instance-id
         :k=>v
     }
     target_group_arn = aws_lb_target_group.app-tg.arn
@@ -67,8 +67,8 @@ resource "aws_lb_listener" "frontend-listener" {
 
 resource "aws_lb_listener" "backend-listener" {
     load_balancer_arn = aws_lb.backend.arn
-    port = all
-    protocol = all
+    port = "5000"
+    protocol = "TCP"
 
     default_action {
         type = "allow"
