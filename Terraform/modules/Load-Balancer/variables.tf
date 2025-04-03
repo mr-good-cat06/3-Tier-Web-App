@@ -29,3 +29,7 @@ variable "app_subnet_ids" {
     type = list(string)
   
 }
+variable "backend-sg-id" {
+    type = string
+  
+}

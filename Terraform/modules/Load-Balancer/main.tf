@@ -47,6 +47,8 @@ resource "aws_lb" "backend" {
     load_balancer_type = "network"
     internal = true
     subnets = var.app_subnet_ids
+    security_groups = [var.backend-sg-id]
+
 
   
 }
@@ -60,6 +62,18 @@ resource "aws_lb_listener" "frontend-listener" {
         type = "forward"
         target_group_arn = aws_lb_target_group.web-tg.arn
       
+    }
+}
+
+resource "aws_lb_listener" "backend-listener" {
+    load_balancer_arn = aws_lb.backend.arn
+    port = all
+    protocol = all
+
+    default_action {
+        type = "allow"
+        target_group_arn = aws_lb_target_group.app-tg.arn
+        
     }
   
 }
