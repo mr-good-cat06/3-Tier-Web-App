@@ -11,3 +11,8 @@ variable "web-sg-id" {
     type = string
   
 }
+
+variable "app-sg-id" {
+    type = string
+  
+}

@@ -78,6 +78,7 @@ module "launch_template" {
     ami = module.ec2.ami-id
     instance_type = "t2.micro"
     web-sg-id = module.security-group.web_sg_id
+    app-sg-id = module.security-group.app_sg_id
   
 
 
@@ -89,7 +90,11 @@ module "asg" {
     web_subnet_ids_list = module.vpc.web_subnet_id-list
     web-tg-arn = module.load-balancing.web-tg-arn
     frontend-LB-id = module.load-balancing.frontend-LB-id
+    backend-launch-template-id = module.launch_template.backend-launch-template-id
+    backend-LB-id = module.load-balancing.backend-LB-id
+    app_subnet_ids_list = module.vpc.app_sunbnet_id-list
     
 
   
 }
+
