@@ -2,7 +2,17 @@ variable "frontend-launch-template-id" {
     type = string
 }
 
+variable "backend-launch-template-id" {
+    type = string
+  
+}
+
 variable "web_subnet_ids_list" {
+    type = list(string)
+  
+}
+
+variable "app_subnet_ids_list" {
     type = list(string)
   
 }
@@ -13,4 +23,9 @@ variable "web-tg-arn" {
 
 variable "frontend-LB-id" {
     type = string
+}
+
+variable "backend-LB-id" {
+    type = string
+  
 }
