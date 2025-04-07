@@ -29,3 +29,7 @@ variable "backend-LB-id" {
     type = string
   
 }
+
+variable "app-tg-arn" {
+    type = string
+}

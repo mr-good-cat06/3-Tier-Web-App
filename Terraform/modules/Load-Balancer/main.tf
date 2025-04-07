@@ -9,6 +9,8 @@ resource "aws_lb_target_group" "web-tg" {
 resource "aws_lb_target_group" "app-tg" {
     name = "app-tg"
     vpc_id = var.vpc_id
+    protocol = "TCP"
+    port = 5000
   
 }
 resource "aws_lb_target_group_attachment" "web-tg-attach" {
@@ -71,7 +73,7 @@ resource "aws_lb_listener" "backend-listener" {
     protocol = "TCP"
 
     default_action {
-        type = "allow"
+        type = "forward"
         target_group_arn = aws_lb_target_group.app-tg.arn
         
     }

@@ -1,8 +1,4 @@
-resource "aws_placement_group" "frontend-asg-placement" {
-    name = "frasg-placement"
-    strategy = "cluster"
-  
-}
+
 
 resource "aws_autoscaling_group" "web-asg" {
     name = "web-asg"
@@ -12,7 +8,6 @@ resource "aws_autoscaling_group" "web-asg" {
     health_check_grace_period = 300
     health_check_type = "ELB"
     force_delete = true
-    placement_group = aws_placement_group.frontend-asg-placement.id
     launch_template {
         id = var.frontend-launch-template-id
         version = "$Latest"
@@ -23,16 +18,11 @@ resource "aws_autoscaling_group" "web-asg" {
 }
 
 resource "aws_autoscaling_attachment" "frontend-asg-attach" {
-    autoscaling_group_name = aws_autoscaling_group.web-asg.id
-    elb = var.frontend-LB-id  
+    autoscaling_group_name = aws_autoscaling_group.web-asg.name
+    lb_target_group_arn = var.web-tg-arn
 }
 
 
-resource "aws_placement_group" "backend-asg-placement" {
-    name = "backend-asg-placement"
-    strategy = "cluster"
-  
-}
 
 resource "aws_autoscaling_group" "app-asg" {
     name = "app-asg"
@@ -42,7 +32,6 @@ resource "aws_autoscaling_group" "app-asg" {
     health_check_grace_period = 300
     health_check_type = "ELB"
     force_delete = true
-    placement_group = aws_placement_group.backend-asg-placement.id
     launch_template {
         id = var.backend-launch-template-id
         version = "$Latest"
@@ -53,6 +42,6 @@ resource "aws_autoscaling_group" "app-asg" {
 }
 
 resource "aws_autoscaling_attachment" "backend-asg-attach" {
-    autoscaling_group_name = aws_autoscaling_group.app-asg.id
-    elb = var.backend-LB-id  
+    autoscaling_group_name = aws_autoscaling_group.app-asg.name
+    lb_target_group_arn = var.app-tg-arn
 }

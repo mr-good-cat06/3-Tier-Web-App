@@ -93,6 +93,8 @@ module "asg" {
     backend-launch-template-id = module.launch_template.backend-launch-template-id
     backend-LB-id = module.load-balancing.backend-LB-id
     app_subnet_ids_list = module.vpc.app_sunbnet_id-list
+    app-tg-arn = module.load-balancing.app-tg-arn
+    
     
 
   
