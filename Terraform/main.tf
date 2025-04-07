@@ -95,8 +95,5 @@ module "asg" {
     app_subnet_ids_list = module.vpc.app_sunbnet_id-list
     app-tg-arn = module.load-balancing.app-tg-arn
     
-    
-
-  
 }
 

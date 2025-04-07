@@ -4,7 +4,7 @@ resource "aws_autoscaling_group" "web-asg" {
     name = "web-asg"
     max_size = 4
     min_size = 1
-    desired_capacity = 2
+    desired_capacity = 1
     health_check_grace_period = 300
     health_check_type = "ELB"
     force_delete = true
@@ -28,7 +28,7 @@ resource "aws_autoscaling_group" "app-asg" {
     name = "app-asg"
     max_size = 4
     min_size = 1
-    desired_capacity = 2
+    desired_capacity = 1
     health_check_grace_period = 300
     health_check_type = "ELB"
     force_delete = true
