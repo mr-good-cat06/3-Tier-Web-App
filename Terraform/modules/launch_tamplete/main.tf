@@ -43,6 +43,12 @@ resource "aws_launch_template" "backend-LT" {
     user_data = base64decode(file("./modules/launch_tamplete/backend_script.sh", {
       region = var.region
       secret_name = var.secret_name
+      user = var.username
+      pass = var.password
+      db_name = var.db_name
+      db_endpoint = var.db_endpoint
+
+
     }))
 
     iam_instance_profile {

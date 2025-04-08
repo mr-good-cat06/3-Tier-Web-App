@@ -87,6 +87,11 @@ module "launch_template" {
     region = var.region
     iam_instance_profile_name = module.iam-role.profile_name
     secret_name = module.secret_manager.secret_name
+    username = var.username
+    password = var.password
+    db_name = var.db_name
+    db_endpoint = module.databse.db_endpoint
+    
   
 
 
@@ -105,3 +110,11 @@ module "asg" {
     
 }
 
+module "secret-manager" {
+    source = "./modules/secret_manager"
+    username = var.username
+    password = var.password
+    endpoint = module.databse.db_endpoint
+    dbname = var.db_name
+  
+}
