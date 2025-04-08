@@ -79,6 +79,7 @@ module "launch_template" {
     instance_type = "t2.micro"
     web-sg-id = module.security-group.web_sg_id
     app-sg-id = module.security-group.app_sg_id
+    backend_lb_dns_name = module.load-balancing.backend-lb-dns
   
 
 

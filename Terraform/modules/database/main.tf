@@ -10,12 +10,12 @@ resource "aws_db_subnet_group" "db-subnet" {
 
 resource "aws_db_instance" "database" {
     allocated_storage = 10
-    db_name = "mydb"
+    db_name = var.db_name
     engine = "mysql"
     engine_version = "8.0.40"
     instance_class = "db.t3.micro"
-    username = "admin"
-    password = "password"
+    username = var.username
+    password = var.password
     db_subnet_group_name = aws_db_subnet_group.db-subnet.name
     skip_final_snapshot  = true
     identifier = "my-database-1"

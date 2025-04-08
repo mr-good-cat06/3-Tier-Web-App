@@ -16,3 +16,8 @@ variable "app-sg-id" {
     type = string
   
 }
+
+variable "backend_lb_dns_name" {
+    type = string
+  
+}

@@ -14,3 +14,13 @@ output "web-tg-arn" {
 output "app-tg-arn" {
     value = aws_lb_target_group.app-tg.arn
 }
+
+output "frontend-lb-dns" {
+    value = aws_lb.frontend.dns_name
+  
+}
+
+output "backend-lb-dns" {
+    value = aws_lb.backend.dns_name
+  
+}
