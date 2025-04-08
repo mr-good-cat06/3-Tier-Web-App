@@ -47,9 +47,9 @@ module "security-group" {
 }
 
 
-module "iam" {
+module "iam-role" {
     source = "./modules/iam-role"
-    db_secret_arn = module.securit_group.db_secret_arn
+    db_secret_arn = module.secret_manager.secret_arn
 
 }
 
@@ -110,7 +110,7 @@ module "asg" {
     
 }
 
-module "secret-manager" {
+module "secret_manager" {
     source = "./modules/secret_manager"
     username = var.username
     password = var.password
