@@ -21,3 +21,19 @@ variable "backend_lb_dns_name" {
     type = string
   
 }
+
+variable "region" {
+    type = string
+  
+}
+
+variable "secret_name" {
+    type = string
+  
+}
+
+
+variable "iam_instance_profile_name" {
+    type = string
+  
+}
