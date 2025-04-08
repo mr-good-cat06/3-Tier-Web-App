@@ -50,6 +50,3 @@ resource "aws_launch_template" "backend-LT" {
     }
 
   }
-    
-
-

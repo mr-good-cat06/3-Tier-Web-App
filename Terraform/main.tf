@@ -31,7 +31,7 @@ module "ec2" {
     subnet_names = var.subnet_names
     web_sg_id = module.security-group.web_sg_id
     app_sg_id = module.security-group.app_sg_id
-    iam_instance_profile_name = module.iam.name
+    iam_instance_profile_name = module.iam-role.profile_name
     
 }
 
@@ -49,6 +49,7 @@ module "security-group" {
 
 module "iam" {
     source = "./modules/iam-role"
+    db_secret_arn = module.securit_group.db_secret_arn
 
 }
 
@@ -56,6 +57,9 @@ module "databse" {
     source = "./modules/database"
     db_subnet_ids = module.vpc.db_sunbnet_id-list
     db_sg = [module.security-group.db_sg_id]
+    username = var.username
+    password = var.password
+    db_name = var.db_name
 
 }
 
@@ -80,6 +84,9 @@ module "launch_template" {
     web-sg-id = module.security-group.web_sg_id
     app-sg-id = module.security-group.app_sg_id
     backend_lb_dns_name = module.load-balancing.backend-lb-dns
+    region = var.region
+    iam_instance_profile_name = module.iam-role.profile_name
+    secret_name = module.secret_manager.secret_name
   
 
 

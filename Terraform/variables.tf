@@ -55,3 +55,20 @@ variable "region" {
   
 }
 
+variable "username" {
+    type = string
+    default = "admin"
+  
+}
+
+variable "password" {
+    type = string
+    default = "Hello123?"
+  
+}
+
+variable "db_name" {
+    type = string
+    default = "My-Project-Database"
+  
+}
