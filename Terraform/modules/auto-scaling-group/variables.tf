@@ -21,6 +21,10 @@ variable "web-tg-arn" {
     type = string
 }
 
+variable "app-tg-arn" {
+    type = string
+}
+
 variable "frontend-LB-id" {
     type = string
 }
@@ -30,6 +34,3 @@ variable "backend-LB-id" {
   
 }
 
-variable "app-tg-arn" {
-    type = string
-}

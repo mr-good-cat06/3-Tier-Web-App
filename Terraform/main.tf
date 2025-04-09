@@ -85,6 +85,7 @@ module "load-balancing" {
     backend-sg-id = module.security-group.backend-sg-id
     public_subnet_ids = module.vpc.o_public_subnet_ids
     app_subnet_ids = module.vpc.app_sunbnet_id-list
+    depends_on = [  ]
     
   
 }
