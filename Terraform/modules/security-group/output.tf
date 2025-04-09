@@ -1,8 +1,8 @@
-output "web_sg_id" {
+output "frontend_sg_id" {
     value = aws_security_group.web.id
 }
 
-output "app_sg_id" {
+output "backend_sg_id" {
     value = aws_security_group.app.id
   
 }

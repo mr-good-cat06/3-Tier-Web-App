@@ -27,23 +27,6 @@ module "vpc" {
     endpoint_sg_id = module.security-group.endpoint_sg_id
 }
 
-module "ec2" {
-    source = "./modules/ec2"
-    private_subnet_ids = module.vpc.private_subnet_ids
-    subnet_names = var.subnet_names
-    web_sg_id = module.security-group.web_sg_id
-    app_sg_id = module.security-group.app_sg_id
-    iam_instance_profile_name = module.iam-role.profile_name
-    username = var.username
-    password = var.password
-    db_name = var.db_name
-    db_endpoint = module.databse.db_endpoint
-    secret_name = module.secret_manager.secret_name
-    region = var.region
-   
-}
-
-
 module "security-group" {
     source = "./modules/security-group"
     project_name = var.project_name
@@ -51,16 +34,20 @@ module "security-group" {
     ssh_allowed_cidrs = var.ssh_allowed_ip
     app_port = var.app_port
     vpc_id = module.vpc.vpc_id
-    
-
 }
-
 
 module "iam-role" {
     source = "./modules/iam-role"
     db_secret_arn = module.secret_manager.secret_arn
+}
 
-
+module "secret-manager" {
+    source = "./modules/secret_manager"
+    username = var.username
+    password = var.password
+    endpoint = module.databse.db_endpoint
+    dbname = var.db_name
+  
 }
 
 module "databse" {
@@ -70,62 +57,113 @@ module "databse" {
     username = var.username
     password = var.password
     db_name = var.db_name
+    
 
 }
 
 
-module "load-balancing" {
-    source = "./modules/Load-Balancer"
-    vpc_id = module.vpc.vpc_id
-    web-instance-id = module.ec2.web-instance-id
-    app-instance-id = module.ec2.app-instance-id
-    frontend-sg-id = module.security-group.frontend-sg-id
-    backend-sg-id = module.security-group.backend-sg-id
-    public_subnet_ids = module.vpc.o_public_subnet_ids
-    app_subnet_ids = module.vpc.app_sunbnet_id-list
-    depends_on = [  ]
-    
+
+######################################################################
+
+
+module "backend-ec2" {
+    source = "./modules/backend/ec2"
+    depends_on = [ module.databse ]
+    backend_instance_profile_name = module.iam-role.backend_instance_profile_name
+    backend_subnet_ids = module.vpc.backend_subnet_id
+    region = var.region
+    backend_sg_id = module.security-group.backend_sg_id
+    secret_name = module.secret-manager.secret_name
+    username = var.username
+    password = var.password
+    db_name = var.db_name
+    db_endpoint = module.database.db_endpoint
+    subnet_names_backend = var.subnet_names_backend
+    instance_type = var.instance_type
+
+
   
 }
 
-module "launch_template" {
-    source = "./modules/launch_tamplete"
-    instance_type = "t2.micro"
-    web-sg-id = module.security-group.web_sg_id
-    app-sg-id = module.security-group.app_sg_id
-    backend_lb_dns_name = module.load-balancing.backend-lb-dns
+
+module "backend-load-balancing" {
+    source = "./modules/backend/load-balancer"
+    depends_on = [ module.backend-ec2 ]
+    vpc_id = module.vpc.vpc_id
+    backend_instance_ids = module.backend-ec2.backend-instance-id
+    backend_LB_sg_id = module.security-group.backend-LB-sg-id
+    backend_subnet_ids = module.vpc.backend_subnet_id
+
+}
+
+
+module "backend-launch-template" {
+    source = "./modules/backend/launch-tamplete"
+    depends_on = [ module.databse ]
+    instance_type = var.instance_type
+    backend_sg_id = module.security-group.backend_sg_id
     region = var.region
-    iam_instance_profile_name = module.iam-role.profile_name
-    secret_name = module.secret_manager.secret_name
+    secret_name = module.secret-manager.secret_name
     username = var.username
     password = var.password
     db_name = var.db_name
     db_endpoint = module.databse.db_endpoint
+    backend_instance_profile_name = module.iam-role.backend_instance_profile_name
+
+}
+
+module "backend-autoscalling" {
+    source = "./modules/backend/asg"
+    depends_on = [ module.backend-launch-template ]
+    backend_launch_template_id = module.backend-launch-template.backend-launch-template-id
+    backend_subnet_ids_list = module.vpc.backend_subnet_id
+    backend_tg_arn = module.backend-load-balancing.backend_target_group_arn
     
+}
+
+
+module "frontend-ec2" {
+    source = "./modules/frontend/ec2"
+    depends_on = [ module.backend-ec2 ]
+    instance_type = var.instance_type
+    frontend_instance_profile_name = module.iam-role.frontend_instance_profile_name
+    frontend_subnet_ids = module.vpc.frontend_subnet_id
+    subnet_names_frontend = var.subnet_names_frontend
+    backend_lb_dns_name = module.backend-load-balancing.backend_lb_dns_name
+    frontend_sg_id = module.security-group.frontend_sg_id
+}
+
+module "frontend-load-balancing" {
+    source = "./modules/frontend/load-balancer"
+    depends_on = [ module.frontend-ec2 ]
+    vpc_id = module.vpc.vpc_id
+    web_instance_ids = module.frontend-ec2.frontend-instance-id
+    frontend_sg_id = module.security-group.frontend-LB-sg-id
+    public_subnet_ids = module.vpc.public_subnet_ids
+
+}
+
+module "frontend-launch-template" {
+    source = "./modules/frontend/launch-tamplete"
+    depends_on = [ module.backend-ec2 ]
+    instance_type = var.instance_type
+    frontend_sg_id = module.security-group.frontend_sg_id
+    backend_lb_dns_name = module.backend-load-balancing.backend_lb_dns_name
+    frontend_instance_profile_name = module.iam-role.frontend_instance_profile_name
     
+}
+
+
+module "frontend-autoscalling" {
+    source = "./modules/frontend/asg"
+    depends_on = [ module.frontend-launch-template ]
+    frontend_launch_template_id = module.frontend-launch-template.frontend-launch-template-id
+    frontend_subnet_ids_list = module.vpc.frontend_subnet_id
+    frontend_tg_arn = module.frontend-load-balancing.web_target_group_arn
+
+
   
-
-
 }
 
-module "asg" {
-    source = "./modules/auto-scaling-group"
-    frontend-launch-template-id = module.launch_template.frontend-launch-template-id
-    web_subnet_ids_list = module.vpc.web_subnet_id-list
-    web-tg-arn = module.load-balancing.web-tg-arn
-    frontend-LB-id = module.load-balancing.frontend-LB-id
-    backend-launch-template-id = module.launch_template.backend-launch-template-id
-    backend-LB-id = module.load-balancing.backend-LB-id
-    app_subnet_ids_list = module.vpc.app_sunbnet_id-list
-    app-tg-arn = module.load-balancing.app-tg-arn
-    
-}
 
-module "secret_manager" {
-    source = "./modules/secret_manager"
-    username = var.username
-    password = var.password
-    endpoint = module.databse.db_endpoint
-    dbname = var.db_name
-  
-}
+#######################################################################

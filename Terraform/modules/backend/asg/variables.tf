@@ -4,7 +4,6 @@ variable "backend_launch_template_id" {
 
 variable "backend_subnet_ids_list" {
     type = list(string)
- 
 }
 
 variable "backend_tg_arn" {

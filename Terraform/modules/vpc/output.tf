@@ -18,7 +18,7 @@ output "db_subnet_id" {
   value       = aws_subnet.db_subnet.*.id
 }
 
-output "o_public_subnet_ids" {
+output "public_subnet_ids" {
   description = "The IDs of the public subnets"
   value       = aws_subnet.public.*.id
   
