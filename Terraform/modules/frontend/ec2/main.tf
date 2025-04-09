@@ -15,7 +15,7 @@ resource "aws_instance" "frontend-ec2-instance" {
     instance_type = var.instance_type
     iam_instance_profile = var.frontend_instance_profile_name
     subnet_id = element(var.frontend_subnet_ids, count.index)
-    user_data = base64encode(templatefile("./modules/launch_tamplete/frontend_script.sh", {
+    user_data = base64encode(templatefile("./modules/frontend/launch-tamplete/frontend_script.sh", {
       backend_url="http://${var.backend_lb_dns_name}:5000/api" }))
     
     vpc_security_group_ids = var.frontend_sg_id

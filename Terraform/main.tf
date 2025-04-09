@@ -36,21 +36,22 @@ module "security-group" {
     vpc_id = module.vpc.vpc_id
 }
 
-module "iam-role" {
-    source = "./modules/iam-role"
-    db_secret_arn = module.secret_manager.secret_arn
-}
 
 module "secret-manager" {
     source = "./modules/secret_manager"
     username = var.username
     password = var.password
-    endpoint = module.databse.db_endpoint
+    endpoint = module.database.db_endpoint
     dbname = var.db_name
   
 }
 
-module "databse" {
+module "iam-role" {
+    source = "./modules/iam-role"
+    db_secret_arn = module.secret-manager.secret_arn
+}
+
+module "database" {
     source = "./modules/database"
     db_subnet_ids = module.vpc.db_subnet_id
     db_sg = [module.security-group.db_sg_id]
@@ -68,7 +69,7 @@ module "databse" {
 
 module "backend-ec2" {
     source = "./modules/backend/ec2"
-    depends_on = [ module.databse ]
+    depends_on = [ module.database ]
     backend_instance_profile_name = module.iam-role.backend_instance_profile_name
     backend_subnet_ids = module.vpc.backend_subnet_id
     region = var.region
@@ -99,7 +100,7 @@ module "backend-load-balancing" {
 
 module "backend-launch-template" {
     source = "./modules/backend/launch-tamplete"
-    depends_on = [ module.databse ]
+    depends_on = [ module.database ]
     instance_type = var.instance_type
     backend_sg_id = module.security-group.backend_sg_id
     region = var.region
@@ -107,7 +108,7 @@ module "backend-launch-template" {
     username = var.username
     password = var.password
     db_name = var.db_name
-    db_endpoint = module.databse.db_endpoint
+    db_endpoint = module.database.db_endpoint
     backend_instance_profile_name = module.iam-role.backend_instance_profile_name
 
 }
@@ -164,6 +165,3 @@ module "frontend-autoscalling" {
 
   
 }
-
-
-#######################################################################
