@@ -25,8 +25,6 @@ module "vpc" {
     subnet_names_backend = var.subnet_names_backend
     subnet_names_db = var.subnet_names_db
     endpoint_sg_id = module.security-group.endpoint_sg_id
-    
-
 }
 
 module "ec2" {
