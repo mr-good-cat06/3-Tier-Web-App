@@ -3,7 +3,3 @@ output "id" {
   
 }
 
-output "instance-id" {
-    value = module.ec2.instance-id
-}
-

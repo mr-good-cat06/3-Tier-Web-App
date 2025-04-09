@@ -32,6 +32,16 @@ module "ec2" {
     web_sg_id = module.security-group.web_sg_id
     app_sg_id = module.security-group.app_sg_id
     iam_instance_profile_name = module.iam-role.profile_name
+    username = var.username
+    password = var.password
+    db_name = var.db_name
+    db_endpoint = module.databse.db_endpoint
+    secret_name = module.secret_manager.secret_name
+    region = var.region
+    backend_lb_dns_name = module.load-balancing.backend_lb_dns_name
+
+
+
     
 }
 
@@ -79,7 +89,6 @@ module "load-balancing" {
 
 module "launch_template" {
     source = "./modules/launch_tamplete"
-    ami = module.ec2.ami-id
     instance_type = "t2.micro"
     web-sg-id = module.security-group.web_sg_id
     app-sg-id = module.security-group.app_sg_id
@@ -91,6 +100,7 @@ module "launch_template" {
     password = var.password
     db_name = var.db_name
     db_endpoint = module.databse.db_endpoint
+    
     
   
 

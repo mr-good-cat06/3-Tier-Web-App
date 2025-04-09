@@ -69,6 +69,6 @@ variable "password" {
 
 variable "db_name" {
     type = string
-    default = "My-Project-Database"
+    default = "MyProjectDatabase"
   
 }

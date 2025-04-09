@@ -31,6 +31,10 @@ resource "aws_launch_template" "frontend-LT" {
     
     user_data = base64encode(templatefile("./modules/launch_tamplete/frontend_script.sh", {
       backend_url="http://${var.backend_lb_dns_name}:5000/api" }))
+
+    iam_instance_profile {
+      name = var.iam_instance_profile_name
+    }
     
 }
 

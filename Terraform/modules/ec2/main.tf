@@ -1,43 +1,69 @@
-# data for amazon linux 2023
-data "aws_ami" "linux_ami" {
+data "aws_ami" "frontend-ami" {
+
   most_recent = true
-  owners      = ["amazon"]  # Important: specify the owner
+  owners = ["self"]
 
   filter {
-    name   = "name"
-    values = ["al2023-ami-*"]  # Pattern for Amazon Linux 2023
-  }
-
-  filter {
-    name   = "architecture"
-    values = ["x86_64"]  # or "arm64" if you need ARM-based instances
-  }
-
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
-
-  filter {
-    name   = "root-device-type"
-    values = ["ebs"]
+    name = "name"
+    values = ["F-image"]
   }
 }
 
-resource "aws_instance" "ec2-instance" {
-    count = (length(var.private_subnet_ids)-2)
-    ami = data.aws_ami.linux_ami.id
+data "aws_ami" "backend-ami" {
+  most_recent = true
+  owners = ["self"]
+
+  filter {
+    name = "name"
+    values = ["B-image1"]
+  }
+  
+}
+
+resource "aws_instance" "frontend-ec2-instance" {
+    count = 2
+    ami = data.aws_ami.frontend-ami.id
     instance_type = "t2.micro"
     iam_instance_profile = var.iam_instance_profile_name
     subnet_id = element(var.private_subnet_ids, count.index)
+    user_data = base64encode(templatefile("./modules/launch_tamplete/frontend_script.sh", {
+      backend_url="http://${var.backend_lb_dns_name}:5000/api" }))
     
       # Determine security group based on subnet type/name
-  vpc_security_group_ids = [
-    contains(["web", "web-1", "web-2"], element(var.subnet_names, count.index)) ? var.web_sg_id : var.app_sg_id
-  ]
+  vpc_security_group_ids = compact([
+    contains(["web"], element(var.subnet_names, count.index)) ? var.web_sg_id : null,
+  ])
   
   tags = {
     Name = ("ec2-${element(var.subnet_names, count.index)}")
+  }
+  
+}
+
+
+resource "aws_instance" "backend-ec2-instance" {
+    count = 2
+    ami = data.aws_ami.backend-ami.id
+    instance_type = "t2.micro"
+    iam_instance_profile = var.iam_instance_profile_name
+    subnet_id = element(var.private_subnet_ids, count.index+2)
+    user_data = base64encode(templatefile("./modules/launch_tamplete/backend_script.sh", {
+      region = var.region
+      secret_name = var.secret_name
+      user = var.username
+      pass = var.password
+      db_name = var.db_name
+      db_endpoint = var.db_endpoint
+
+
+    }))
+      # Determine security group based on subnet type/name
+  vpc_security_group_ids = compact([
+    contains(["app"], element(var.subnet_names, count.index+2)) ? var.app_sg_id : null,
+  ])
+  
+  tags = {
+    Name = ("ec2-${element(var.subnet_names, count.index+2)}")
   }
   
 }
