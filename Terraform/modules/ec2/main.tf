@@ -26,14 +26,7 @@ resource "aws_instance" "frontend-ec2-instance" {
     instance_type = "t2.micro"
     iam_instance_profile = var.iam_instance_profile_name
     subnet_id = element(var.private_subnet_ids, count.index)
-    user_data = base64encode(templatefile("./modules/launch_tamplete/frontend_script.sh", {
-      backend_url="http://${var.backend_lb_dns_name}:5000/api" }))
     
-      # Determine security group based on subnet type/name
-  vpc_security_group_ids = compact([
-    contains(["web"], element(var.subnet_names, count.index)) ? var.web_sg_id : null,
-  ])
-  
   tags = {
     Name = ("ec2-${element(var.subnet_names, count.index)}")
   }

@@ -13,7 +13,7 @@ resource "aws_vpc_endpoint" "ssm" {
   vpc_id            = aws_vpc.vpc.id
   service_name      = "com.amazonaws.${var.region}.ssm"
   vpc_endpoint_type = "Interface"
-  subnet_ids         = slice(var.private_subnet_ids, 0, 2)  # First subnet from each AZ
+  subnet_ids         = [ aws_subnet.frontend_subnet[0].id, aws_subnet.backend_subnet[0].id ]  # First subnet from each AZ
   security_group_ids = [var.endpoint_sg_id]
 }
 
@@ -21,7 +21,7 @@ resource "aws_vpc_endpoint" "ssmmessages" {
   vpc_id            = aws_vpc.vpc.id
   service_name      = "com.amazonaws.${var.region}.ssmmessages"
   vpc_endpoint_type = "Interface"
-  subnet_ids         = slice(var.private_subnet_ids, 0, 2) # First subnet from each AZ
+  subnet_ids         = [ aws_subnet.frontend_subnet[0].id, aws_subnet.backend_subnet[0].id ] # First subnet from each AZ
   security_group_ids = [var.endpoint_sg_id]
 }
 
@@ -29,7 +29,7 @@ resource "aws_vpc_endpoint" "ec2messages" {
   vpc_id            = aws_vpc.vpc.id
   service_name      = "com.amazonaws.${var.region}.ec2messages"
   vpc_endpoint_type = "Interface"
-  subnet_ids         = slice(var.private_subnet_ids, 0, 2) # First subnet from each AZ
+  subnet_ids         = [ aws_subnet.frontend_subnet[0].id, aws_subnet.backend_subnet[0].id ] # First subnet from each AZ
   security_group_ids = [var.endpoint_sg_id]
 }
 /*
@@ -48,15 +48,37 @@ resource "aws_subnet" "private_subnet" {
 
 
 
-resource "aws_subnet" "private" {
-  count             = max(length(var.private_subnet_cidrs), length(var.availability_zones))
+resource "aws_subnet" "frontend_subnet" {
+  count             = 2
   vpc_id            = aws_vpc.vpc.id
-  cidr_block        = var.private_subnet_cidrs[count.index]
+  cidr_block        = var.subnet_ip_frontend[count.index]
   availability_zone = var.availability_zones[count.index % length(var.availability_zones)]
   tags = {
-    Name = var.subnet_names[count.index]
+    Name = var.subnet_names_frontend[count.index]
   }
 }
+
+resource "aws_subnet" "backend_subnet" {
+  count             = 2
+  vpc_id            = aws_vpc.vpc.id
+  cidr_block        = var.subnet_ip_backend[count.index]
+  availability_zone = var.availability_zones[count.index % length(var.availability_zones)]
+  tags = {
+    Name = var.subnet_names_backend[count.index]
+  }
+}
+
+
+resource "aws_subnet" "db_subnet" {
+  count             = 2
+  vpc_id            = aws_vpc.vpc.id
+  cidr_block        = var.subnet_ip_db[count.index]
+  availability_zone = var.availability_zones[count.index % length(var.availability_zones)]
+  tags = {
+    Name = var.subnet_names_db[count.index]
+  }
+}
+
 
 
 resource "aws_subnet" "public" {
@@ -122,10 +144,23 @@ resource "aws_route_table_association" "public" {
 
 }
 
+resource "aws_route_table_association" "frontend_association" {
+  count = 2
+  subnet_id = aws_subnet.frontend_subnet[count.index].id
+  route_table_id = aws_route_table.private[count.index % 2].id
 
-resource "aws_route_table_association" "private" {
-  count = length(aws_subnet.private)
-  subnet_id = aws_subnet.private[count.index].id
+}
+
+resource "aws_route_table_association" "backend_association" {
+  count = 2
+  subnet_id = aws_subnet.backend_subnet[count.index].id
+  route_table_id = aws_route_table.private[count.index % 2].id
+
+}
+
+resource "aws_route_table_association" "db_association" {
+  count = 2
+  subnet_id = aws_subnet.db_subnet[count.index].id
   route_table_id = aws_route_table.private[count.index % 2].id
 
 }

@@ -14,14 +14,18 @@ provider "aws" {
 module "vpc" {
     source = "./modules/vpc"
     vpc_cidr = var.vpc_cidr
-    availability_zones = var.availability_zones
-    private_subnet_cidrs = var.private_subnet_cidrs
-    public_subnet_cidrs = var.public_subnet_cidrs
-    subnet_names = var.subnet_names
-    endpoint_sg_id = module.security-group.endpoint_sg_id
-    private_subnet_ids = module.vpc.private_subnet_ids
     region = var.region
     vpc_name = var.project_name
+    availability_zones = var.availability_zones
+    public_subnet_cidrs = var.public_subnet_cidrs
+    subnet_ip_frontend = var.private_subnet_frontend
+    subnet_ip_backend = var.private_subnet_backend
+    subnet_ip_db = var.private_subnet_db
+    subnet_names_frontend = var.subnet_names_frontend
+    subnet_names_backend = var.subnet_names_backend
+    subnet_names_db = var.subnet_names_db
+    endpoint_sg_id = module.security-group.endpoint_sg_id
+    
 
 }
 
@@ -38,11 +42,7 @@ module "ec2" {
     db_endpoint = module.databse.db_endpoint
     secret_name = module.secret_manager.secret_name
     region = var.region
-    backend_lb_dns_name = module.load-balancing.backend_lb_dns_name
-
-
-
-    
+   
 }
 
 
