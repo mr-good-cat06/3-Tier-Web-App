@@ -3,9 +3,19 @@ output "vpc_id" {
   value       = aws_vpc.vpc.id
 }
 
-output "private_subnet_ids" {
+output "frontend_subnet_id" {
   description = "The IDs of the private subnets"
-  value       = aws_subnet.private.*.id
+  value       = aws_subnet.frontend_subnet.*.id
+}
+
+output "backend_subnet_id" {
+  description = "The IDs of the private subnets"
+  value       = aws_subnet.backend_subnet.*.id
+}
+
+output "db_subnet_id" {
+  description = "The IDs of the private subnets"
+  value       = aws_subnet.db_subnet.*.id
 }
 
 output "o_public_subnet_ids" {
@@ -14,21 +24,9 @@ output "o_public_subnet_ids" {
   
 }
 
-output "db_sunbnet_id-list" {
-  description = "The IDs of the database subnets"
-  value = [for sb in aws_subnet.private : sb.id if can(sb.tags.Name) && startswith(sb.tags.Name, "db")]
-
-}
-
-output "app_sunbnet_id-list" {
-  description = "The IDs of the database subnets"
-  value = [for sb in aws_subnet.private : sb.id if can(sb.tags.Name) && startswith(sb.tags.Name, "app")]
-
-}
-
-output "web_subnet_id-list" {
-  description = "The IDs of the database subnets"
-  value = [for sb in aws_subnet.private : sb.id if can(sb.tags.Name) && startswith(sb.tags.Name, "web")]
-
+output "nat_gateway_id" {
+  description = "NAT gateway id"
+  value = aws_nat_gateway.nat-gw.id
+  
 }
 
