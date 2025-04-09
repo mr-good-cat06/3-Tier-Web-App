@@ -15,11 +15,11 @@ output "endpoint_sg_id"{
     value = aws_security_group.endpoint-sg.id
 }
 
-output "frontend-sg-id" {
+output "frontend-LB-sg-id" {
     value = aws_security_group.frontend-LB.id
 }
 
-output "backend-sg-id" {
+output "backend-LB-sg-id" {
     value = aws_security_group.backend-LB.id
   
 }

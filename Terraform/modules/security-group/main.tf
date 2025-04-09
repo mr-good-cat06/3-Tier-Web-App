@@ -96,6 +96,8 @@ resource "aws_vpc_security_group_ingress_rule" "app_ssh" {
   description       = "Allow SSH from ${each.value}"
 }
 
+
+
 resource "aws_vpc_security_group_egress_rule" "app_all_out" {
   security_group_id = aws_security_group.app.id
   cidr_ipv4         = "0.0.0.0/0"

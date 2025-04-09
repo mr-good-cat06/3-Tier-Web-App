@@ -53,6 +53,7 @@ module "security-group" {
     ssh_allowed_cidrs = var.ssh_allowed_ip
     app_port = var.app_port
     vpc_id = module.vpc.vpc_id
+    
 
 }
 
