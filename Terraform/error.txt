@@ -1,0 +1,33 @@
+╷
+│ Error: creating Secrets Manager Secret: InvalidRequestException: You can't create this secret because a secret with this name is already scheduled for deletion.
+│
+│   with module.secret-manager.aws_secretsmanager_secret.db_credentials,
+│   on modules\secret_manager\main.tf line 1, in resource "aws_secretsmanager_secret" "db_credentials":
+│    1: resource "aws_secretsmanager_secret" "db_credentials" {
+│
+╵
+╷
+│ Error: creating EC2 VPC Endpoint (com.amazonaws.ap-northeast-1.ssm): DuplicateSubnetsInSameZone: Found another VPC endpoint subnet in the availability zone of subnet-04e5bd1f7798a917f. VPC endpoint subnets should be in different availability zones supported by the VPC endpoint service.
+│       status code: 400, request id: 193bc157-1784-45a9-96b1-022c310c612d
+│
+│   with module.vpc.aws_vpc_endpoint.ssm,
+│   on modules\vpc\main.tf line 12, in resource "aws_vpc_endpoint" "ssm":
+│   12: resource "aws_vpc_endpoint" "ssm" {
+│
+╵
+╷
+│ Error: creating EC2 VPC Endpoint (com.amazonaws.ap-northeast-1.ssmmessages): DuplicateSubnetsInSameZone: Found another VPC endpoint subnet in the availability zone of subnet-04e5bd1f7798a917f. VPC endpoint subnets should be in different availability zones supported by the VPC endpoint service.
+│       status code: 400, request id: fede2ca1-9f95-4341-8475-f102e6322135
+│
+│   with module.vpc.aws_vpc_endpoint.ssmmessages,
+│   on modules\vpc\main.tf line 20, in resource "aws_vpc_endpoint" "ssmmessages":
+│   20: resource "aws_vpc_endpoint" "ssmmessages" {
+│
+╵
+╷
+│ Error: creating EC2 VPC Endpoint (com.amazonaws.ap-northeast-1.ec2messages): DuplicateSubnetsInSameZone: Found another VPC endpoint subnet in the availability zone of subnet-04e5bd1f7798a917f. VPC endpoint subnets should be in different availability zones supported by the VPC endpoint service.
+│       status code: 400, request id: 31f5659c-d576-4dc2-bb06-2cc443fb9b7a
+│
+│   with module.vpc.aws_vpc_endpoint.ec2messages,
+│   on modules\vpc\main.tf line 28, in resource "aws_vpc_endpoint" "ec2messages":
+│   28: resource "aws_vpc_endpoint" "ec2messages" {

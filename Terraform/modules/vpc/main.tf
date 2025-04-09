@@ -13,7 +13,7 @@ resource "aws_vpc_endpoint" "ssm" {
   vpc_id            = aws_vpc.vpc.id
   service_name      = "com.amazonaws.${var.region}.ssm"
   vpc_endpoint_type = "Interface"
-  subnet_ids         = [ aws_subnet.frontend_subnet[0].id, aws_subnet.backend_subnet[0].id ]  # First subnet from each AZ
+  subnet_ids         = [ aws_subnet.frontend_subnet[0].id, aws_subnet.frontend_subnet[1].id ]  # First subnet from each AZ
   security_group_ids = [var.endpoint_sg_id]
 }
 
@@ -21,7 +21,7 @@ resource "aws_vpc_endpoint" "ssmmessages" {
   vpc_id            = aws_vpc.vpc.id
   service_name      = "com.amazonaws.${var.region}.ssmmessages"
   vpc_endpoint_type = "Interface"
-  subnet_ids         = [ aws_subnet.frontend_subnet[0].id, aws_subnet.backend_subnet[0].id ] # First subnet from each AZ
+  subnet_ids         = [ aws_subnet.frontend_subnet[0].id, aws_subnet.frontend_subnet[1].id ] # First subnet from each AZ
   security_group_ids = [var.endpoint_sg_id]
 }
 
@@ -29,7 +29,7 @@ resource "aws_vpc_endpoint" "ec2messages" {
   vpc_id            = aws_vpc.vpc.id
   service_name      = "com.amazonaws.${var.region}.ec2messages"
   vpc_endpoint_type = "Interface"
-  subnet_ids         = [ aws_subnet.frontend_subnet[0].id, aws_subnet.backend_subnet[0].id ] # First subnet from each AZ
+  subnet_ids         = [ aws_subnet.frontend_subnet[0].id, aws_subnet.frontend_subnet[1].id ] # First subnet from each AZ
   security_group_ids = [var.endpoint_sg_id]
 }
 /*

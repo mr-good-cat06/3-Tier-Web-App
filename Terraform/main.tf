@@ -138,7 +138,7 @@ module "frontend-load-balancing" {
     source = "./modules/frontend/load-balancer"
     depends_on = [ module.frontend-ec2 ]
     vpc_id = module.vpc.vpc_id
-    web_instance_ids = module.frontend-ec2.frontend-instance-id
+    frontend_instance_ids = module.frontend-ec2.frontend-instance-id
     frontend_sg_id = module.security-group.frontend-LB-sg-id
     public_subnet_ids = module.vpc.public_subnet_ids
 
