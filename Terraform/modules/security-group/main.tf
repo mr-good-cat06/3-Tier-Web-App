@@ -78,7 +78,7 @@ resource "aws_security_group" "app" {
 # App Security Group Rules
 resource "aws_vpc_security_group_ingress_rule" "app_from_web" {
   security_group_id            = aws_security_group.app.id
-  referenced_security_group_id = aws_security_group.web.id
+  referenced_security_group_id = aws_security_group.backend-LB.id
   from_port                    = var.app_port
   to_port                      = var.app_port
   ip_protocol                  = "tcp"

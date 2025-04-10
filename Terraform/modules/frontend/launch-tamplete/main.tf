@@ -5,7 +5,7 @@ data "aws_ami" "frontend-ami" {
 
   filter {
     name = "name"
-    values = ["F-image"]
+    values = ["frontend-image"]
   }
 }
 

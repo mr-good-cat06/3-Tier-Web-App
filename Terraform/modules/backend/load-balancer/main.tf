@@ -1,7 +1,7 @@
 resource "aws_lb_target_group" "app-tg" {
-  name     = "web"
-  port     = 80
-  protocol = "HTTP"
+  name     = "app"
+  port     = 5000
+  protocol = "TCP"
   vpc_id   = var.vpc_id
 }
 
@@ -10,7 +10,7 @@ resource "aws_lb_target_group_attachment" "app" {
 
   target_group_arn = aws_lb_target_group.app-tg.arn
   target_id        = each.value
-  port             = 80
+  port             = 5000
 }
 
 resource "aws_lb" "backend" {
@@ -23,8 +23,8 @@ resource "aws_lb" "backend" {
 
 resource "aws_lb_listener" "backend" {
   load_balancer_arn = aws_lb.backend.arn
-  port              = 80
-  protocol          = "HTTP"
+  port              = 5000
+  protocol          = "TCP"
 
   default_action {
     type             = "forward"
