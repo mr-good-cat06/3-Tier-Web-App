@@ -52,9 +52,13 @@ resource "aws_iam_policy" "secret_access" {
     Version = "2012-10-17"
     Statement = [
       {
-        Action   = ["secretsmanager:GetSecretValue"]
+        Action = [
+          "secretsmanager:GetSecretValue",
+          "secretsmanager:DescribeSecret",
+          "secretsmanager:ListSecrets"
+        ]
         Effect   = "Allow"
-        Resource = var.db_secret_arn
+        Resource = "*"
       }
     ]
   })
