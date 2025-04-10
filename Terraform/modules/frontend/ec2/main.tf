@@ -18,7 +18,7 @@ resource "aws_instance" "frontend-ec2-instance" {
     user_data = base64encode(templatefile("./modules/frontend/launch-tamplete/frontend_script.sh", {
       backend_url="http://${var.backend_lb_dns_name}:5000/api" }))
     
-    vpc_security_group_ids = var.frontend_sg_id
+    vpc_security_group_ids = [var.frontend_sg_id]
 
   tags = {
     Name = ("ec2-${element(var.subnet_names_frontend, count.index)}")

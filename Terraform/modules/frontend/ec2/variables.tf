@@ -24,6 +24,6 @@ variable "backend_lb_dns_name" {
 }
 
 variable "frontend_sg_id" {
-    type = list(string)
+    type = string
   
 }

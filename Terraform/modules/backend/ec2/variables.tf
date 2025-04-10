@@ -14,7 +14,7 @@ variable "region" {
 }
 
 variable "backend_sg_id" {
-    type = list(string)
+    type = string
   
 }
 

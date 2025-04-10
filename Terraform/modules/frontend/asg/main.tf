@@ -16,6 +16,6 @@ resource "aws_autoscaling_group" "frontend_asg" {
 }
 
 resource "aws_autoscaling_attachment" "frontend-asg-attach" {
-    autoscaling_group_name = aws_autoscaling_group.web-asg.name
+    autoscaling_group_name = aws_autoscaling_group.frontend_asg.name
     lb_target_group_arn = var.frontend_tg_arn
 }

@@ -2,7 +2,7 @@ variable "vpc_id" {
   type = string
 }
 
-variable "web_instance_ids" {
+variable "frontend_instance_ids" {
   type = list(string)
 }
 

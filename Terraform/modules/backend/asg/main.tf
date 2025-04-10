@@ -16,6 +16,6 @@ resource "aws_autoscaling_group" "backend_asg" {
 }
 
 resource "aws_autoscaling_attachment" "backend-asg-attach" {
-    autoscaling_group_name = aws_autoscaling_group.app-asg.name
+    autoscaling_group_name = aws_autoscaling_group.backend_asg.name
     lb_target_group_arn = var.backend_tg_arn
 }

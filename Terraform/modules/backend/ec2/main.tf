@@ -25,7 +25,8 @@ resource "aws_instance" "backend-ec2-instance" {
 
 
     }))
-    vpc_security_group_ids = var.backend_sg_id
+    vpc_security_group_ids = [var.backend_sg_id]
+
 
   
   tags = {

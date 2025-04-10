@@ -6,8 +6,7 @@ resource "aws_lb_target_group" "web-tg" {
 }
 
 resource "aws_lb_target_group_attachment" "web" {
-  for_each = var.web_instance_ids
-
+  for_each = { for idx, id in var.frontend_instance_ids : idx => id }
   target_group_arn = aws_lb_target_group.web-tg.arn
   target_id        = each.value
   port             = 80

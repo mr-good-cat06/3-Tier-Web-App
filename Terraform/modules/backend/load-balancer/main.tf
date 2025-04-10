@@ -6,7 +6,7 @@ resource "aws_lb_target_group" "app-tg" {
 }
 
 resource "aws_lb_target_group_attachment" "app" {
-  for_each = var.backend_instance_ids
+  for_each = { for idx, id in var.backend_instance_ids : idx => id }
 
   target_group_arn = aws_lb_target_group.app-tg.arn
   target_id        = each.value
@@ -15,7 +15,7 @@ resource "aws_lb_target_group_attachment" "app" {
 
 resource "aws_lb" "backend" {
   name               = "backend-LB"
-  load_balancer_type = "Network"
+  load_balancer_type = "network"
   internal           = true
   security_groups    = [var.backend_LB_sg_id]
   subnets            = var.backend_subnet_ids
