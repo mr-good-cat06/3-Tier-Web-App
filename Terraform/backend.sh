@@ -6,57 +6,43 @@ echo "Starting backend setup script"
 
 # Set environment variables for the system
 cat > /etc/profile.d/db_env.sh << 'EOF'
-export AWS_REGION='ap-northeast-1'
-export DB_SECRET_NAME='db-credentials1'
-export DB_USERNAME='admin'
-export DB_PASSWORD='Hello123'
-export DB_ENDPOINT='database-1.crmigsmu6rtx.ap-northeast-1.rds.amazonaws.com'
-export DB_NAME='database-1'
+export AWS_REGION='${region}'
+export DB_SECRET_NAME='${secret_name}'
+export DB_USERNAME='${db_username}'
+export DB_PASSWORD='${db_password}'
+export DB_ENDPOINT='${db_endpoint}'
+export DB_NAME='${db_name}'
 EOF
 
 # Make the script executable
 chmod +x /etc/profile.d/db_env.sh
 
 # Also add to /etc/environment for system-wide availability
-echo "AWS_REGION='ap-northeast-1'" >> /etc/environment
-echo "DB_SECRET_NAME='db-credentials1'" >> /etc/environment
-echo "DB_USERNAME='admin'" >> /etc/environment
-echo "DB_PASSWORD='Hello123'" >> /etc/environment
-echo "DB_ENDPOINT='database-1.crmigsmu6rtx.ap-northeast-1.rds.amazonaws.com'" >> /etc/environment
-echo "DB_NAME='database-1'" >> /etc/environment
+echo "AWS_REGION='${region}'" >> /etc/environment
+echo "DB_SECRET_NAME='${secret_name}'" >> /etc/environment
+echo "DB_USERNAME='${db_username}'" >> /etc/environment
+echo "DB_PASSWORD='${db_password}'" >> /etc/environment
+echo "DB_ENDPOINT='${db_endpoint}'" >> /etc/environment
+echo "DB_NAME='${db_name}'" >> /etc/environment
 
 # If you're using systemd to run your application, add the variables there too
-if [ -f /etc/systemd/system/userapp.service ]; then
+if [ -f /etc/systemd/system/backend.service ]; then
     echo "Adding environment variables to systemd service"
     # Add Environment directives to the service file
-    sed -i '/\[Service\]/a Environment="AWS_REGION=ap-northeast-1"' /etc/systemd/system/userapp.service
-    sed -i '/\[Service\]/a Environment="DB_SECRET_NAME=db-credentials1"' /etc/systemd/system/userapp.service
-    sed -i '/\[Service\]/a Environment="DB_USERNAME=admin"' /etc/systemd/system/userapp.service
-    sed -i '/\[Service\]/a Environment="DB_PASSWORD=Hello123"' /etc/systemd/system/userapp.service
-    sed -i '/\[Service\]/a Environment="DB_ENDPOINT=database-1.crmigsmu6rtx.ap-northeast-1.rds.amazonaws.com"' /etc/systemd/system/userapp.service
-    sed -i '/\[Service\]/a Environment="DB_NAME=database-1"' /etc/systemd/system/userapp.service
+    sed -i '/\[Service\]/a Environment="AWS_REGION=${region}"' /etc/systemd/system/backend.service
+    sed -i '/\[Service\]/a Environment="DB_SECRET_NAME=${secret_name}"' /etc/systemd/system/backend.service
+    sed -i '/\[Service\]/a Environment="DB_USERNAME=${db_username}"' /etc/systemd/system/backend.service
+    sed -i '/\[Service\]/a Environment="DB_PASSWORD=${db_password}"' /etc/systemd/system/backend.service
+    sed -i '/\[Service\]/a Environment="DB_ENDPOINT=${db_endpoint}"' /etc/systemd/system/backend.service
+    sed -i '/\[Service\]/a Environment="DB_NAME=${db_name}"' /etc/systemd/system/backend.service
     
     # Reload systemd and restart the service
+    sudo systemctl daemon-reexec
     systemctl daemon-reload
-    systemctl enable userapp
-    systemctl start userapp
+    systemctl restart backend
 fi
 
 # Ensure the application is properly configured to listen on all interfaces for LB health checks
 # Add any application-specific configurations here
 
 echo "Backend setup completed"
-
-
-
-
-#!/bin/bash
-python3 -c "
-from sqlalchemy import create_engine
-engine = create_engine('mysql+pymysql://admin:Hello123@database-1.crmigsmu6rtx.ap-northeast-1.rds.amazonaws.com/database-1')
-try:
-    connection = engine.connect()
-    print('Database connection successful')
-except Exception as e:
-    print(f'Database connection failed: {e}')
-"

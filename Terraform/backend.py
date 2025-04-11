@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 import os
 import boto3
+from botocore.exceptions import ClientError
 import json
 
 # Create the Flask application
@@ -13,40 +14,40 @@ CORS(app)  # Enable CORS for all routes
 region = os.environ.get('AWS_REGION', 'ap-northeast-1')
 
 # Get secret name from environment variable
-secret_name = os.environ.get('DB_SECRET_NAME', 'db-credentials')
+secret_name = os.environ.get('DB_SECRET_NAME')
 
 try:
     # Initialize the Secrets Manager client
     session = boto3.session.Session()
     client = session.client(service_name='secretsmanager', region_name=region)
-
+    
     # Retrieve database credentials from Secrets Manager
     response = client.get_secret_value(SecretId=secret_name)
     db_secrets = json.loads(response['SecretString'])
-
+    
     # Extract values
     db_username = db_secrets['username']
     db_password = db_secrets['password']
-    db_endpoint = db_secrets['endpoint']
+    db_endpoint = db_secrets['host']
     db_name = db_secrets['dbname']
-
+    
     # Construct the database URI
     db_uri = f"mysql+pymysql://{db_username}:{db_password}@{db_endpoint}/{db_name}"
-
+    
 except Exception as e:
     # Fallback to environment variables if secrets manager fails
     print(f"Error retrieving database credentials from Secrets Manager: {e}")
     print("Using environment variables for database connection.")
-
+    
     db_username = os.environ.get('DB_USERNAME')
     db_password = os.environ.get('DB_PASSWORD')
     db_endpoint = os.environ.get('DB_ENDPOINT')
     db_name = os.environ.get('DB_NAME')
-
+    
     # Check if all environment variables are set
     if not all([db_username, db_password, db_endpoint, db_name]):
         raise EnvironmentError("Database credentials not available. Set environment variables or fix Secrets Manager access.")
-
+        
     db_uri = f"mysql+pymysql://{db_username}:{db_password}@{db_endpoint}/{db_name}"
 
 # MySQL Database Configuration
@@ -63,7 +64,7 @@ class User(db.Model):
     name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(100), unique=True, nullable=False)
     phone = db.Column(db.String(20), nullable=False)
-
+    
     def to_dict(self):
         return {
             'id': self.id,
@@ -87,8 +88,8 @@ def get_users():
 def create_user():
     data = request.json
     new_user = User(
-        name=data['name'],
-        email=data['email'],
+        name=data['name'], 
+        email=data['email'], 
         phone=data['phone']
     )
     db.session.add(new_user)
@@ -121,3 +122,28 @@ def delete_user(user_id):
 if __name__ == '__main__':
     init_db()  # Create database tables
     app.run(host='0.0.0.0', port=5000, debug=True)
+
+
+
+    #############################################################
+
+    userapp.service
+    #############################################################
+
+
+[Unit]
+Description=User Management Flask App
+After=network.target
+
+[Service]
+Type=simple
+User=ec2-user
+WorkingDirectory=/home/ec2-user/myapp
+StandardOutput=file:/home/ec2-user/myapp/app.log
+StandardError=file:/home/ec2-user/myapp/app.err
+ExecStart=/usr/bin/python3 /home/ec2-user/myapp/app.py
+Restart=always
+
+
+[Install]
+WantedBy=multi-user.target
