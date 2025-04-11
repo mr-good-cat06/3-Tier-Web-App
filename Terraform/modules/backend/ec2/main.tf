@@ -18,8 +18,8 @@ resource "aws_instance" "backend-ec2-instance" {
     user_data = base64encode(templatefile("./modules/backend/ec2/backend_script.sh", {
       region = var.region
       secret_name = var.secret_name
-      user = var.username
-      pass = var.password
+      db_username = var.username
+      db_password = var.password
       db_name = var.db_name
       db_endpoint = var.db_endpoint
     }))
