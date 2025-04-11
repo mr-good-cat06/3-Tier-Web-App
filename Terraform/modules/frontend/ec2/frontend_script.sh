@@ -1,17 +1,17 @@
+#!/bin/bash
+# Update packages and prepare Apache
 sudo dnf update -y
 
+# Move the static index.html file into Apache's web root
+sudo mv /home/ec2-user/index.html /var/www/html/
 
-sudo mv /home/ec2-user/index.html /var/www/html
-
-
-#!/bin/bash
-# Create a JavaScript config file with the backend URL
-
-cat > /var/www/html/config.js << EOF
+# Create the JavaScript config file with the backend URL
+cat <<EOF | sudo tee /var/www/html/config.js > /dev/null
 window.CONFIG = {
   API_URL: "${backend_url}"
 };
 EOF
 
+# Enable and start Apache web server
 sudo systemctl enable httpd
-sudo systemctl start httpd
+sudo systemctl restart httpd

@@ -3,6 +3,7 @@ resource "aws_lb_target_group" "app-tg" {
   port     = 5000
   protocol = "TCP"
   vpc_id   = var.vpc_id
+  
 }
 
 resource "aws_lb_target_group_attachment" "app" {
