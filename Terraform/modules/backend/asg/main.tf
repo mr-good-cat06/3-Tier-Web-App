@@ -12,6 +12,12 @@ resource "aws_autoscaling_group" "backend_asg" {
 
     }
 
+    tag {
+        key = "Name"
+        value = "Application Backend"
+        propagate_at_launch = true
+    }
+
     vpc_zone_identifier = var.backend_subnet_ids_list
 }
 

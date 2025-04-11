@@ -11,6 +11,11 @@ resource "aws_autoscaling_group" "frontend_asg" {
         version = "$Latest"
 
     }
+    tag {
+        key = "Name"
+        value = "Application Frontend"
+        propagate_at_launch = true
+    }
 
     vpc_zone_identifier = var.frontend_subnet_ids_list
 }
