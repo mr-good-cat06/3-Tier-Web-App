@@ -2,7 +2,7 @@
 
 # Set up logging
 exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
-echo "Starting backend setup script"
+echo "Starting userapp setup script"
 
 # Set environment variables for the system
 cat > /etc/profile.d/db_env.sh << 'EOF'
@@ -26,20 +26,22 @@ echo "DB_ENDPOINT='${db_endpoint}'" >> /etc/environment
 echo "DB_NAME='${db_name}'" >> /etc/environment
 
 # If you're using systemd to run your application, add the variables there too
-if [ -f /etc/systemd/system/backend.service ]; then
+if [ -f /etc/systemd/system/userapp.service ]; then
     echo "Adding environment variables to systemd service"
     # Add Environment directives to the service file
-    sed -i '/\[Service\]/a Environment="AWS_REGION=${region}"' /etc/systemd/system/backend.service
-    sed -i '/\[Service\]/a Environment="DB_SECRET_NAME=${secret_name}"' /etc/systemd/system/backend.service
-    sed -i '/\[Service\]/a Environment="DB_USERNAME=${db_username}"' /etc/systemd/system/backend.service
-    sed -i '/\[Service\]/a Environment="DB_PASSWORD=${db_password}"' /etc/systemd/system/backend.service
-    sed -i '/\[Service\]/a Environment="DB_ENDPOINT=${db_endpoint}"' /etc/systemd/system/backend.service
-    sed -i '/\[Service\]/a Environment="DB_NAME=${db_name}"' /etc/systemd/system/backend.service
+    sed -i '/\[Service\]/a Environment="AWS_REGION=${region}"' /etc/systemd/system/userapp.service
+    sed -i '/\[Service\]/a Environment="DB_SECRET_NAME=${secret_name}"' /etc/systemd/system/userapp.service
+    sed -i '/\[Service\]/a Environment="DB_USERNAME=${db_username}"' /etc/systemd/system/userapp.service
+    sed -i '/\[Service\]/a Environment="DB_PASSWORD=${db_password}"' /etc/systemd/system/userapp.service
+    sed -i '/\[Service\]/a Environment="DB_ENDPOINT=${db_endpoint}"' /etc/systemd/system/userapp.service
+    sed -i '/\[Service\]/a Environment="DB_NAME=${db_name}"' /etc/systemd/system/userapp.service
     
     # Reload systemd and restart the service
     sudo systemctl daemon-reexec
     systemctl daemon-reload
-    systemctl restart backend
+    systemctl enable userapp
+    systemctl start userapp
+
 fi
 
 # Ensure the application is properly configured to listen on all interfaces for LB health checks

@@ -1,5 +1,5 @@
 resource "aws_secretsmanager_secret" "db_credentials" {
-    name = "this_db_credentials_0410_1"
+    name = "0411-db-creds"
   
 }
 

@@ -125,25 +125,4 @@ if __name__ == '__main__':
 
 
 
-    #############################################################
 
-    userapp.service
-    #############################################################
-
-
-[Unit]
-Description=User Management Flask App
-After=network.target
-
-[Service]
-Type=simple
-User=ec2-user
-WorkingDirectory=/home/ec2-user/myapp
-StandardOutput=file:/home/ec2-user/myapp/app.log
-StandardError=file:/home/ec2-user/myapp/app.err
-ExecStart=/usr/bin/python3 /home/ec2-user/myapp/app.py
-Restart=always
-
-
-[Install]
-WantedBy=multi-user.target
