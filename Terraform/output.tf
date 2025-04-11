@@ -1,5 +1,4 @@
-output "id" {
-    value = module.vpc.vpc_id
+output "f-load-balancer-id" {
+    value = module.frontend-load-balancing.frontend_lb_dns_name
   
 }
-
