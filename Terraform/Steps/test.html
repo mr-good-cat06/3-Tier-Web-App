@@ -1,0 +1,17 @@
+
+
+API_URL = 'http://35.72.7.235:5000/api'
+
+
+window.CONFIG = {API_URL: "http://54.250.94.206:5000/api"};
+
+
+\
+
+# Load proxy modules
+LoadModule proxy_module modules/mod_proxy.so
+LoadModule proxy_http_module modules/mod_proxy_http.so
+
+# Proxy configuration for API
+ProxyPass "/api" "http://backend-LB-2e7616e542d87a5e.elb.ap-northeast-1.amazonaws.com:5000/api"
+ProxyPassReverse "/api" "http://backend-LB-2e7616e542d87a5e.elb.ap-northeast-1.amazonaws.com:5000/api"

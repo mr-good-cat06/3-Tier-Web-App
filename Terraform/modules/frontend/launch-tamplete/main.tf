@@ -5,7 +5,7 @@ data "aws_ami" "frontend-ami" {
 
   filter {
     name = "name"
-    values = ["web-tier-AMI"]
+    values = ["frontend-worksgood"]
   }
 }
 

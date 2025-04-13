@@ -12,6 +12,14 @@ window.CONFIG = {
 };
 EOF
 
+cat <<EOF | sudo tee /etc/httpd/conf.d/proxy.conf > /dev/null
+ProxyPass "/api" "${backend_url}"
+ProxyPassReverse "/api" "${backend_url}"
+EOF
+
+
+
+
 # Enable and start Apache web server
 sudo systemctl enable httpd
 sudo systemctl restart httpd
