@@ -23,3 +23,9 @@ output "backend-LB-sg-id" {
     value = aws_security_group.backend-LB.id
   
 }
+
+
+output "efs-sg-id" {
+    value = aws_security_group.efs-sg.id
+  
+}

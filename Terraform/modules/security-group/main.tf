@@ -234,3 +234,26 @@ resource "aws_vpc_security_group_egress_rule" "backend-LB_all_out" {
   description       = "Allow all outbound traffic"
   
 }
+
+
+resource "aws_security_group" "efs-sg" {
+  name = "aws_efs-sg"
+  vpc_id = var.vpc_id
+}
+
+resource "aws_vpc_security_group_ingress_rule" "allow_all_in" {
+  security_group_id = aws_security_group.efs-sg.id
+  referenced_security_group_id = aws_security_group.app.id
+  cidr_ipv4 = "0.0.0.0/0"
+  ip_protocol = "-1"
+  description = "Allow all inbound traffic"
+
+}
+
+
+resource "aws_vpc_security_group_egress_rule" "allow_all_out" {
+  security_group_id = aws_security_group.efs-sg.id
+  cidr_ipv4 = "0.0.0.0/0"
+  ip_protocol = "-1"
+}
+
