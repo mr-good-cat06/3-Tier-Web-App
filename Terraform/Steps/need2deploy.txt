@@ -5,6 +5,8 @@ Auto scaling group
 load balancers
 NAT gateway
 
+S3
+EFS shared storage
 
 *********************************
 CDN
@@ -12,5 +14,4 @@ WAF
 Route53
 
 
-S3
-EFS shared storage
+
