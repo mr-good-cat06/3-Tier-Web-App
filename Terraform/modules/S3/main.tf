@@ -1,6 +1,5 @@
 resource "aws_s3_bucket" "this" {
-    bucket = var.bucket_name
-  
+  bucket = var.bucket_name
 }
 
 resource "aws_s3_bucket_public_access_block" "s3_block" {
@@ -13,28 +12,26 @@ resource "aws_s3_bucket_public_access_block" "s3_block" {
 }
 
 data "aws_iam_policy_document" "allow_access" {
-    statement {
-        principals {
-            type = "AWS"
-            identifiers = ["*"]
-        }
-
-        actions = [
-            "s3:GetObject",
-            "s3:ListBucket"
-        ]
-
-        resources = [
-            aws_s3_bucket.this.arn,
-            "${aws_s3_bucket.this.arn}/*"
-        
-        ]
-
+  statement {
+    principals {
+      type        = "AWS"
+      identifiers = ["*"]
     }
+
+    actions = [
+      "s3:GetObject",
+      "s3:ListBucket"
+    ]
+
+    resources = [
+      aws_s3_bucket.this.arn,
+      "${aws_s3_bucket.this.arn}/*"
+    ]
+  }
 }
 
-
 resource "aws_s3_bucket_policy" "allow_access" {
-    bucket = aws_s3_bucket.this.id
-    policy = data.aws_iam_policy_document.allow_access.json
+  bucket     = aws_s3_bucket.this.id
+  policy     = data.aws_iam_policy_document.allow_access.json
+  depends_on = [aws_s3_bucket_public_access_block.s3_block]
 }
