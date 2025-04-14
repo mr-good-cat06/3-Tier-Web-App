@@ -243,7 +243,6 @@ resource "aws_security_group" "efs-sg" {
 
 resource "aws_vpc_security_group_ingress_rule" "allow_all_in" {
   security_group_id = aws_security_group.efs-sg.id
-  referenced_security_group_id = aws_security_group.app.id
   cidr_ipv4 = "0.0.0.0/0"
   ip_protocol = "-1"
   description = "Allow all inbound traffic"

@@ -101,6 +101,6 @@ variable "instance_type" {
 
 variable "bucket_name" {
     type = string
-    default = "mywebappbucket-04142025PM"
+    default = "mywebappbucket-04142025pm"
   
 }
