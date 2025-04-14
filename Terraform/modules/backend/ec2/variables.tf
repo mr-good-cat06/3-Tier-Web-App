@@ -50,3 +50,8 @@ variable "instance_type" {
     type = string
   
 }
+
+variable "fs_id" {
+    type = string
+  
+}

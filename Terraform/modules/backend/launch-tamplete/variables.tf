@@ -35,3 +35,8 @@ variable "db_endpoint" {
 variable "backend_instance_profile_name" {
     type = string
 }
+
+variable "fs_id" {
+    type = string
+  
+}

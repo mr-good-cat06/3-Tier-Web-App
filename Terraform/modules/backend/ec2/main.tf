@@ -4,7 +4,7 @@ data "aws_ami" "backend-ami" {
 
   filter {
     name = "name"
-    values = ["backend-worksgood"]
+    values = ["backend"]
   }
   
 }
@@ -22,6 +22,7 @@ resource "aws_instance" "backend-ec2-instance" {
       db_password = var.password
       db_name = var.db_name
       db_endpoint = var.db_endpoint
+      fs_id = var.fs_id
     }))
     vpc_security_group_ids = [var.backend_sg_id]
 

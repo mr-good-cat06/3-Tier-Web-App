@@ -83,7 +83,7 @@ module "database" {
 
 module "backend-ec2" {
     source = "./modules/backend/ec2"
-    depends_on = [ module.database ]
+    depends_on = [ module.database, module.efs-fs ]
     backend_instance_profile_name = module.iam-role.backend_instance_profile_name
     backend_subnet_ids = module.vpc.backend_subnet_id
     region = var.region
@@ -95,6 +95,7 @@ module "backend-ec2" {
     db_endpoint = module.database.db_endpoint
     subnet_names_backend = var.subnet_names_backend
     instance_type = var.instance_type
+    fs_id = module.efs-fs.fs_id
 
 
   
@@ -114,7 +115,7 @@ module "backend-load-balancing" {
 
 module "backend-launch-template" {
     source = "./modules/backend/launch-tamplete"
-    depends_on = [ module.database ]
+    depends_on = [ module.database, module.efs-fs ]
     instance_type = var.instance_type
     backend_sg_id = module.security-group.backend_sg_id
     region = var.region
@@ -124,6 +125,7 @@ module "backend-launch-template" {
     db_name = var.db_name
     db_endpoint = module.database.db_endpoint
     backend_instance_profile_name = module.iam-role.backend_instance_profile_name
+    fs_id = module.efs-fs.fs_id
 
 }
 

@@ -4,7 +4,7 @@ data "aws_ami" "backend-ami" {
 
   filter {
     name = "name"
-    values = ["backend-worksgood"]
+    values = ["backend"]
   }
   
 }
@@ -21,6 +21,7 @@ resource "aws_launch_template" "backend-LT" {
       db_password = var.password
       db_name = var.db_name
       db_endpoint = var.db_endpoint
+      fs_id = var.fs_id
 
 
     }))
