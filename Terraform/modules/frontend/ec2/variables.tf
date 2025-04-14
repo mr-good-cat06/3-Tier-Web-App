@@ -27,3 +27,7 @@ variable "frontend_sg_id" {
     type = string
   
 }
+variable "bucket_name" {
+    type = string
+  
+}

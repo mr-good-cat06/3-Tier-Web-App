@@ -16,7 +16,8 @@ resource "aws_instance" "frontend-ec2-instance" {
     iam_instance_profile = var.frontend_instance_profile_name
     subnet_id = element(var.frontend_subnet_ids, count.index)
     user_data = base64encode(templatefile("./modules/frontend/launch-tamplete/frontend_script.sh", {
-      backend_url="http://${var.backend_lb_dns_name}:5000/api" }))
+      backend_url="http://${var.backend_lb_dns_name}:5000/api"
+      bucket_url = "https://${var.bucket_name}.s3.ap-northeast-1.amazonaws.com/"}))
     
     vpc_security_group_ids = [var.frontend_sg_id]
 

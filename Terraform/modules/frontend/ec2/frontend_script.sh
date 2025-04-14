@@ -23,6 +23,3 @@ ProxyPassReverse "/api" "${backend_url}"
 ProxyPass "/config.js" "!"
 Alias "/config.js" "/var/www/html/config.js"
 EOF
-
-sudo systemctl enable httpd
-sudo systemctl start httpd
