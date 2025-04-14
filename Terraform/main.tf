@@ -46,6 +46,20 @@ module "secret-manager" {
   
 }
 
+module "s3-bucket" {
+    source = "./modules/S3"
+    bucket_name = var.bucket_name
+
+}
+
+
+module "efs-fs" {
+    source = "./modules/EFS"
+    project_name = var.project_name
+    backend_subnet = module.vpc.backend_subnet_id
+    efs_sg = module.security-group.efs-sg-id
+}
+
 module "iam-role" {
     source = "./modules/iam-role"
     db_secret_arn = module.secret-manager.secret_arn
@@ -132,6 +146,7 @@ module "frontend-ec2" {
     subnet_names_frontend = var.subnet_names_frontend
     backend_lb_dns_name = module.backend-load-balancing.backend_lb_dns_name
     frontend_sg_id = module.security-group.frontend_sg_id
+    bucket_name = var.bucket_name
 }
 
 module "frontend-load-balancing" {
@@ -151,6 +166,7 @@ module "frontend-launch-template" {
     frontend_sg_id = module.security-group.frontend_sg_id
     backend_lb_dns_name = module.backend-load-balancing.backend_lb_dns_name
     frontend_instance_profile_name = module.iam-role.frontend_instance_profile_name
+    bucket_name = var.bucket_name
     
 }
 
