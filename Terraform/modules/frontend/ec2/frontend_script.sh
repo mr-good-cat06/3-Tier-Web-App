@@ -5,7 +5,7 @@ EOF
 sudo chown apache:apache /var/www/html/config.js
 sudo chmod 644 /var/www/html/config.js
 
-cat <<EOF | sudo tee /etc/systemd/system/conf.d/proxy.conf > /dev/null
+cat <<EOF | sudo tee /etc/httpd/conf.d/proxy.conf > /dev/null
 # Existing modules
 LoadModule proxy_module modules/mod_proxy.so
 LoadModule proxy_http_module modules/mod_proxy_http.so
