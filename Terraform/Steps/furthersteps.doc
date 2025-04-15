@@ -9,4 +9,5 @@ bucket
 
 ssl certificate for media.tanvir.com
 cloudfront distributions
-route 53 undate
+route 53 undate 
+- record create for media.tanvir.work and  tanvir.work
