@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Management</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        input, button { margin: 10px 0; padding: 5px; }
+    </style>
+</head>
+<body>
+    <h1>User Management</h1>
+    <nav>
+        <a href="/">Home</a> |
+        <a href="/data">User Data</a> |
+        <a href="http://www.media.tanvir.work/media.html">Media Gallery</a>
+    </nav>
+
+    <div>
+        <h3>Add/Update User</h3>
+        <input type="hidden" id="userId">
+        <input type="text" id="name" placeholder="Name" required>
+        <input type="email" id="email" placeholder="Email" required>
+        <input type="text" id="phone" placeholder="Phone" required>
+        <button onclick="submitUser()">Submit</button>
+    </div>
+
+    <div>
+        <h3>Users List</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th><th>Name</th><th>Email</th><th>Phone</th><th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="userTableBody"></tbody>
+        </table>
+    </div>
+
+    <script>
+        const API_URL = '/api';
+
+        async function fetchUsers() {
+            try {
+                const res = await fetch(`${API_URL}/users`);
+                const users = await res.json();
+                const tableBody = document.getElementById('userTableBody');
+                tableBody.innerHTML = '';
+                users.forEach(user => {
+                    tableBody.innerHTML += `
+                        <tr>
+                            <td>${user.id}</td>
+                            <td>${user.name}</td>
+                            <td>${user.email}</td>
+                            <td>${user.phone}</td>
+                            <td>
+                                <button onclick="editUser(${user.id})">Edit</button>
+                                <button onclick="deleteUser(${user.id})">Delete</button>
+                            </td>
+                        </tr>`;
+                });
+            } catch (err) {
+                console.error(err);
+                alert('Failed to load users');
+            }
+        }
+
+        async function submitUser() {
+            const id = document.getElementById('userId').value;
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+
+            const url = id ? `${API_URL}/users/${id}` : `${API_URL}/users`;
+            const method = id ? 'PUT' : 'POST';
+
+            const res = await fetch(url, {
+                method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, email, phone })
+            });
+
+            if (res.ok) {
+                fetchUsers();
+                document.getElementById('userId').value = '';
+                document.getElementById('name').value = '';
+                document.getElementById('email').value = '';
+                document.getElementById('phone').value = '';
+            } else {
+                alert('Failed to submit user');
+            }
+        }
+
+        async function editUser(id) {
+            const res = await fetch(`${API_URL}/users/${id}`);
+            const user = await res.json();
+            document.getElementById('userId').value = user.id;
+            document.getElementById('name').value = user.name;
+            document.getElementById('email').value = user.email;
+            document.getElementById('phone').value = user.phone;
+        }
+
+        async function deleteUser(id) {
+            const res = await fetch(`${API_URL}/users/${id}`, { method: 'DELETE' });
+            if (res.ok) fetchUsers();
+            else alert('Failed to delete user');
+        }
+
+        fetchUsers();
+    </script>
+</body>
+</html>
