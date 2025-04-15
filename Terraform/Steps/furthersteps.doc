@@ -1,0 +1,12 @@
+frontend ec2 
+- proxy.conf file modify
+
+bucket 
+- website enabling
+- only allow ec2 instance to fetch data
+
+
+
+ssl certificate for media.tanvir.com
+cloudfront distributions
+route 53 undate
