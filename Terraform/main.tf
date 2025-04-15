@@ -43,7 +43,6 @@ module "secret-manager" {
     password = var.password
     endpoint = module.database.db_endpoint
     dbname = var.db_name
-  
 }
 
 module "s3-bucket" {
